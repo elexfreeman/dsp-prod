@@ -1,0 +1,21 @@
+.cls-brand
+{
+    text-align: center;
+    display: block;
+    margin: 0 auto;
+    font-size: 26px;
+}
+
+.login-form-bg
+{
+    background-image: url('../../images/bg.jpg');
+    min-height: 100vh;
+    height: auto;
+    position: relative;
+    min-width: 290px;
+    overflow: hidden;
+    opacity: 1;
+    visibility: visible;
+    background-repeat:no-repeat;
+    background-size: 100% 100%;
+}

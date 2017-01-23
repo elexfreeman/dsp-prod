@@ -1,0 +1,128 @@
+.card.login-page{
+    margin: 10vh auto;
+    width: 400px;
+
+}
+
+.section.login-section {
+    height: 100vh;
+    background-color: #f4f3ef;
+    background-image: linear-gradient(to bottom, transparent 0%, rgba(112, 112, 112, 0) 60%, rgba(186, 186, 186, 0.15) 100%);
+}
+
+.pointer {
+    cursor:pointer;
+}
+
+.bootstrap-table .fixed-table-container{
+    height: 40vh;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.radio1 {
+    height: 20px;
+    width: 20px;
+    float: left;
+}
+
+.radio_text {
+    display: block;
+    float: left;
+    padding-left: 10px;
+}
+
+/*Скрол бар*/
+::-webkit-scrollbar{
+    width:12px;
+}
+
+::-webkit-scrollbar-thumb{
+    border-width:1px 1px 1px 2px;
+    border-color: #777;
+    background-color: #aaa;
+}
+
+::-webkit-scrollbar-thumb:hover{
+    border-width: 1px 1px 1px 2px;
+    border-color: #555;
+    background-color: #777;
+}
+
+::-webkit-scrollbar-track{
+    border-left: solid 1px #d0d0d0;
+    background-color: #eee;
+}
+::-webkit-scrollbar-track:hover{
+    border-left: solid 1px #aaa;
+    background-color: #eee;
+}
+
+/*==============*/
+
+.card.patients-table{
+    margin-bottom:
+    0;
+}
+
+.plan hr{
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+
+.loader-file{
+    display: inline-block;
+}
+
+.content.loader{
+    height: 70vh;
+    padding-top: 25vh;
+}
+
+.legenda{
+    overflow: auto;
+    padding-top: 20px;
+    padding-bottom:
+    20px;
+    
+}
+
+.legenda-item{
+    float: left;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.legenda-item-circle{
+    width: 20px;
+    height: 20px;
+    background-color: #f1b68a;
+    border-radius: 50%;
+    float: left;
+    border : 1px #f1b68a solid;
+}
+.legenda-item-text{
+    float: left;
+    padding-left: 10px;
+}
+
+.legenda-item-circle.empty{
+    background-color: transparent;
+    border : 1px #2e2e2e solid;
+}
+.cursor-wait{
+    cursor:wait;
+}
+
+.form-control {
+
+    padding: 7px 15px;
+    height: 32px;
+
+}
+
+.show-c{
+    float: left;
+    padding-right: 10px;
+}

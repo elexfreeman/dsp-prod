@@ -1,0 +1,449 @@
+<div class="wrapper">
+    <div class="sidebar" data-background-color="white" data-active-color="danger">
+
+        <!--
+            Tip 1: you can change the color of the sidebar's background using: data-background-color="white | black"
+            Tip 2: you can change the color of the active button using the data-active-color="primary | info | success | warning | danger"
+        -->
+
+        <div class="sidebar-wrapper">
+            <div class="logo">
+                <a href=""  ng-click="toLink('')" class="simple-text">
+                    МИАЦ - диспансеризация
+                </a>
+            </div>
+
+            <ul class="nav">
+                <li>
+                    <a href="" ng-click="toLink('')">
+                        <i class="ti-panel"></i>
+                        <p>Рабочий стол</p>
+                    </a>
+                </li>
+                <li class="active">
+                    <a href="" ng-click="toLink('dispPlan')">
+                        <i class="ti-pie-chart"></i>
+                        <p>План диспансеризации</p>
+                    </a>
+                </li>
+                <li>
+                    <a href="" ng-click="toLink('proflPlan')">
+                        <i class="ti-support"></i>
+                        <p>План профилактических осмотров</p>
+                    </a>
+                </li>
+                <li>
+                    <a href="" ng-click="toLink('loader')">
+                        <i class="ti-reload"></i>
+                        <p>Загрузка<br>актуального среза РС ЕРЗЛ</p>
+                    </a>
+                </li>
+                <li>
+                    <a ng-click="Logout()" class="pointer">
+                        <i class="ti-arrow-top-right"></i>
+                        <p>Выход</p>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="main-panel">
+        <nav class="navbar navbar-default">
+            <div class="container-fluid" style="padding-top: 10px;">
+                <div class="row">
+                    <div class="col-sm-3">Минимальная плановая численность подлежащих диспансеризации: <b>{{DspPlanForYear.plan_count  | priceFormat}}</b></div>
+                    <div class="col-sm-3">Общая численность подлежащих диспансеризации:  <b>{{total | priceFormat}}</b></div>
+                    <div class="col-sm-6">Численность включенных в план: <b><span id="pl_all"></span></b> (<span id="ppr">100</span>%)
+                        <div class="row text-center">
+                            <div class="col-xs-3 small"><p><b>I:</b><br><span id="pl_1"></span></p></div>
+                            <div class="col-xs-3"><p><b>II:</b><br><span id="pl_2"></span></p></div>
+                            <div class="col-xs-3"><p><b>III:</b><br><span id="pl_3"></span></p></div>
+                            <div class="col-xs-3"><p><b>IV:</b><br><span id="pl_4"></span></p></div>
+
+
+                        </div>
+                    </div>
+
+                </div>
+              <!--  <div class="navbar-header">
+                    <button type="button" class="navbar-toggle">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar bar1"></span>
+                        <span class="icon-bar bar2"></span>
+                        <span class="icon-bar bar3"></span>
+                    </button>
+                    <a class="navbar-brand pointer" ng-click="toLink('')">2017 г. - </a>
+                    <a class="navbar-brand pointer" ng-click="toLink('')">План по диспансеризации</a>
+                </div>
+                <div class="collapse navbar-collapse">
+                    <ul class="nav navbar-nav navbar-right">
+
+                        <li>
+                            <a ng-click="Logout()" class="pointer">
+                                <i class="ti-arrow-top-right"></i>
+                                <p>Выход</p>
+                            </a>
+                        </li>
+                    </ul>
+                </div>-->
+            </div>
+        </nav>
+
+
+        <div class="content" style="padding-top: 10px;">
+            <div class="container-fluid">
+              <!--  <div class="row plan">
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="card">
+                            <div class="content">
+                                <div class="row">
+                                    <div class="col-xs-3">
+                                        <div class="icon-big icon-warning text-center">
+                                            <i class="ti-server"></i>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-9">
+                                        <div class="numbers">
+                                            <p>Плановое кол-во в соответствии с планом МЗ СО</p><hr>
+                                            {{DspPlanForYear.plan_count  | priceFormat}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="card">
+                            <div class="content">
+                                <div class="row">
+                                    <div class="col-xs-3">
+                                        <div class="icon-big icon-warning text-center">
+                                            <i class="ti-info"></i>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-9">
+                                        <div class="numbers">
+                                            <p>Общее кол-во подлежат диспансеризации по РС ЕРЗЛ</p><hr>
+                                            {{total | priceFormat}}
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-sm-6">
+                        <div class="card">
+                            <div class="content">
+                                <div class="row">
+                                    <div class="col-xs-2">
+                                        <div class="icon-big icon-success text-center">
+                                            <i class="ti-check"></i>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-10">
+                                        <div class="numbers">
+                                            <p>Кол-во отмеченных для включения в план: <b><span id="pl_all"></span></b> (<span id="ppr">100</span>%)</p>
+                                            <hr>
+                                           <div class="row text-center">
+                                                <div class="col-xs-3 small"><p><b>I:</b><br><span id="pl_1"></span></p></div>
+                                                <div class="col-xs-3"><p><b>II:</b><br><span id="pl_2"></span></p></div>
+                                                <div class="col-xs-3"><p><b>III:</b><br><span id="pl_3"></span></p></div>
+                                                <div class="col-xs-3"><p><b>IV:</b><br><span id="pl_4"></span></p></div>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>-->
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card patients-table" >
+                            <div class="header" style="padding-top: 10px;">
+                                <form>
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label style="display: block;">Возраст с - по:</label>
+                                                <div class="col-sm-6">
+                                                    <select ng-change="RefreshFilter()" class="form-control border-input" ng-model="patient.age_beg" >
+                                                        <option ng-repeat="age in age_list" value="{{age}}">{{age}}</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <select ng-change="RefreshFilter()"  class="form-control border-input" ng-model="patient.age_end" >
+                                                        <option ng-repeat="age in age_list" value="{{age}}">{{age}}</option>
+                                                    </select>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <label>Пол:</label>
+                                                <div class="col-sm-12">
+                                                    <select ng-change="RefreshFilter()" class="form-control border-input" ng-model="patient.sex" >
+                                                        <option ng-repeat="s in sex_list" value="{{s.m}}">{{s.v}}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <div class="form-group">
+                                                <label style="display: block;">Месяц даты рождения с - по:</label>
+                                                <div class="col-sm-6">
+                                                    <select ng-change="RefreshFilter()"  class="form-control border-input col-sm-6" ng-model="patient.month_beg" >
+                                                        <option ng-repeat="month in month_list" value="{{month.m}}">{{month.month}}</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <select ng-change="RefreshFilter()"  class="form-control border-input col-sm-6" ng-model="patient.month_end" >
+                                                        <option ng-repeat="month in month_list" value="{{month.m}}">{{month.month}}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <div>Показать включенных:</div>
+                                                <div class="col-sm-3">
+                                                    <label class="" for="patinet_chk1">
+                                                        <input type="checkbox" ng-change="RefreshFilter()" value="1" ng-model="patient.chk1" id="patinet_chk1" class="radio1"> I
+                                                    </label>
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <label class="" for="patinet_chk2">
+                                                        <input type="checkbox" ng-change="RefreshFilter()" value="1" ng-model="patient.chk2" id="patinet_chk2" class="radio1"> II
+                                                    </label>
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <label class="" for="patinet_chk3">
+                                                        <input type="checkbox" ng-change="RefreshFilter()" value="1" ng-model="patient.chk3" id="patinet_chk3" class="radio1"> III
+                                                    </label>
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <label class="" for="patinet_chk4">
+                                                        <input type="checkbox" ng-change="RefreshFilter()" value="1" ng-model="patient.chk4" id="patinet_chk4" class="radio1"> VI
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <div>Не соответствие TMODOC </div>
+                                                <label class="" for="patinet_chk2">
+                                                <div class="col-sm-12">
+                                                    <label class="" for="patinet_chk8">
+                                                        <input type="checkbox" ng-change="RefreshFilter()" value="1" ng-model="patient.chk_red" id="patinet_chk8" class="radio1">
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label>Участок прикрепления:</label>
+                                                <div class="col-sm-12">
+                                                    <select ng-change="RefreshFilter()" class="form-control border-input" ng-model="patient.uch" >
+                                                        <option value="">-</option>
+                                                        <option ng-repeat="u in uch" value="{{u.num_uch}}">{{u.num_uch}}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label>Участковый врач:</label>
+                                                <div class="col-sm-12">
+                                                    <select ng-change="RefreshFilter()" class="form-control border-input" ng-model="patient.doc" >
+                                                        <option value="">-</option>
+                                                        <option ng-repeat="doc in doctors" value="{{doc.DRCODE}}">{{doc.SURNAME}} {{doc.NAME}} {{doc.SECNAME}}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-2">
+                                            <div class="form-group">
+                                                <input type="text" ng-model="patient.surname" placeholder="Фамилия" class="form-control border-input">
+                                            </div>
+                                        </div>
+                                       <div class="col-sm-2">
+                                            <div class="form-group">
+                                                <input type="text" ng-model="patient.name" placeholder="Имя" class="form-control border-input">
+                                            </div>
+                                        </div>
+                                       <div class="col-sm-2">
+                                            <div class="form-group">
+                                                <input type="text" ng-model="patient.secname" placeholder="Отчество" class="form-control border-input">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-1"></div>
+
+                                       <div class="col-sm-5 text-right">
+                                           <button class="btn btn-fill btn-info" ng-click="RefreshFilter()" style="padding: 4px 17px;">
+                                               <i class="ti-filter"></i> Применить</button>
+                                           <button class="btn btn-warning" ng-click="ResetF()" style="padding: 4px 17px;">
+                                               <i class="ti-reload"></i> Сбросить</button>
+                                        </div>
+
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="content table-responsive table-full-width" style="font-size: 11px;">
+                                <table class="table table-striped table-hover" bs-table-control="bsTable" id="b1"></table>
+                            </div>
+
+                            <div class="legenda">
+                                <div class="legenda-item">
+                                    <div class="legenda-item-circle"></div>
+                                    <div class="legenda-item-text"> - нет соответствия с TMODOC</div>
+                                </div>
+                                <div class="legenda-item">
+                                    <div class="legenda-item-circle empty"></div>
+                                    <div class="legenda-item-text"> - пациента можно включить в план</div>
+                                </div>
+                            </div>
+
+                            <div style="overflow: auto">
+                                <div class="content text-left" style="padding-top: 0;float: left">
+                                    <button href="#fakelink" class="btn btn-fill btn-success" ng-click="CheckAllFromFilter()">Включить в план всех из текущего фильтра</button>
+
+                                    <button href="#fakelink" class="btn btn-fill btn-error" ng-click="UnCheckAllFromFilter()">Исключить из плана всех из текущего фильтра</button>
+
+                                    <form method="post" action="/develop/api/dsp_patients/toexelFrom">
+                                        <input name="surname" value="" type="hidden">
+                                        <input name="name" value="" type="hidden">
+                                        <input name="surname" value="" type="hidden">
+                                        <input name="secname" value="" type="hidden">
+                                        <input name="sex" value="" type="hidden">
+                                        <input name="chk1" value="" type="hidden">
+                                        <input name="chk2" value="" type="hidden">
+                                        <input name="chk3" value="" type="hidden">
+                                        <input name="chk4" value="" type="hidden">
+                                        <input name="chk_red" value="" type="hidden">
+                                        <input name="q" value="" type="hidden">
+                                        <input name="age_beg" value="" type="hidden">
+                                        <input name="age_end" value="" type="hidden">
+                                        <input name="month_beg" value="" type="hidden">
+                                        <input name="month_end" value="" type="hidden">
+                                        <input name="DRCODE" value="" type="hidden">
+                                    <button class="btn btn-fill btn-success" type="submit">В Excel</button>
+                                    </form>
+
+                                    <div style="display: none" id="exportable">
+                                        <table border="1">
+                                            <tr>
+                                                <td>ЛПУ прикрепления</td>
+                                                <td>Наименование участка</td>
+                                                <td>Участок</td>
+                                                <td>Тип участка</td>
+                                                <td>Код врача</td>
+                                                <td>Специальность врача</td>
+                                                <td>Фамилия</td>
+                                                <td>Имя</td>
+                                                <td>Отчество</td>
+                                                <td>Возраст</td>
+                                                <td>Дата рождения</td>
+                                                <td>Пол</td>
+                                                <td>ЕНП</td>
+                                                <td>ЛПУ</td>
+                                                <td>Квартал</td>
+                                                <td>Тип диспансеризации</td>
+                                                <td>Год</td>
+
+                                            </tr>
+                                            <tr ng-repeat="a in exel.rows">
+                                                <td>{{a.lpubase}}</td>
+                                                <td>{{a.NAME}}</td>
+                                                <td>{{a.lpubase_u}}</td>
+                                                <td>{{a.typeui}}</td>
+                                                <td>{{a.drcode}}</td>
+                                                <td>{{a.speccode}}</td>
+                                                <td>{{a.surname1}}</td>
+                                                <td>{{a.name1}}</td>
+                                                <td>{{a.secname1}}</td>
+                                                <td>{{a.age}}</td>
+                                                <td>{{a.birthday1}}</td>
+                                                <td>{{a.sex}}</td>
+                                                <td>{{a.enp}}</td>
+                                                <td>{{a.disp_lpu}}</td>
+                                                <td>{{a.disp_quarter}}</td>
+                                                <td>{{a.disp_type}}</td>
+                                                <td>{{a.disp_year}}</td>
+                                            </tr>
+
+                                        </table>
+                                    </div>
+
+                                    <button href="#fakelink" class="btn btn-fill btn-warning cursor-wait">Отправить в ТФОМС</button>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!--<footer class="footer">
+            <div class="container-fluid">
+                <nav class="pull-left">
+                    <ul>
+
+                        <li>
+                            <a href="http://medlan.samara.ru">
+                                МИАЦ 2017
+                            </a>
+                        </li>
+
+                    </ul>
+                </nav>
+                <div class="copyright pull-right">
+                    &copy; 2017, сделано с  <i class="fa fa-heart heart"></i>  <a href="https://vk.com/id20267596">elex</a>
+                </div>
+            </div>
+        </footer>-->
+
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="Loader" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">Подождите! Идет обработка!</h4>
+            </div>
+            <div class="modal-body">
+                <svg style="margin:0 auto" width='128px' height='128px' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid" class="uil-default"><rect x="0" y="0" width="100" height="100" fill="none" class="bk"></rect><rect  x='46.5' y='40' width='7' height='20' rx='5' ry='5' fill='#cfbe27' transform='rotate(0 50 50) translate(0 -30)'>  <animate attributeName='opacity' from='1' to='0' dur='1s' begin='0s' repeatCount='indefinite'/></rect><rect  x='46.5' y='40' width='7' height='20' rx='5' ry='5' fill='#cfbe27' transform='rotate(30 50 50) translate(0 -30)'>  <animate attributeName='opacity' from='1' to='0' dur='1s' begin='0.08333333333333333s' repeatCount='indefinite'/></rect><rect  x='46.5' y='40' width='7' height='20' rx='5' ry='5' fill='#cfbe27' transform='rotate(60 50 50) translate(0 -30)'>  <animate attributeName='opacity' from='1' to='0' dur='1s' begin='0.16666666666666666s' repeatCount='indefinite'/></rect><rect  x='46.5' y='40' width='7' height='20' rx='5' ry='5' fill='#cfbe27' transform='rotate(90 50 50) translate(0 -30)'>  <animate attributeName='opacity' from='1' to='0' dur='1s' begin='0.25s' repeatCount='indefinite'/></rect><rect  x='46.5' y='40' width='7' height='20' rx='5' ry='5' fill='#cfbe27' transform='rotate(120 50 50) translate(0 -30)'>  <animate attributeName='opacity' from='1' to='0' dur='1s' begin='0.3333333333333333s' repeatCount='indefinite'/></rect><rect  x='46.5' y='40' width='7' height='20' rx='5' ry='5' fill='#cfbe27' transform='rotate(150 50 50) translate(0 -30)'>  <animate attributeName='opacity' from='1' to='0' dur='1s' begin='0.4166666666666667s' repeatCount='indefinite'/></rect><rect  x='46.5' y='40' width='7' height='20' rx='5' ry='5' fill='#cfbe27' transform='rotate(180 50 50) translate(0 -30)'>  <animate attributeName='opacity' from='1' to='0' dur='1s' begin='0.5s' repeatCount='indefinite'/></rect><rect  x='46.5' y='40' width='7' height='20' rx='5' ry='5' fill='#cfbe27' transform='rotate(210 50 50) translate(0 -30)'>  <animate attributeName='opacity' from='1' to='0' dur='1s' begin='0.5833333333333334s' repeatCount='indefinite'/></rect><rect  x='46.5' y='40' width='7' height='20' rx='5' ry='5' fill='#cfbe27' transform='rotate(240 50 50) translate(0 -30)'>  <animate attributeName='opacity' from='1' to='0' dur='1s' begin='0.6666666666666666s' repeatCount='indefinite'/></rect><rect  x='46.5' y='40' width='7' height='20' rx='5' ry='5' fill='#cfbe27' transform='rotate(270 50 50) translate(0 -30)'>  <animate attributeName='opacity' from='1' to='0' dur='1s' begin='0.75s' repeatCount='indefinite'/></rect><rect  x='46.5' y='40' width='7' height='20' rx='5' ry='5' fill='#cfbe27' transform='rotate(300 50 50) translate(0 -30)'>  <animate attributeName='opacity' from='1' to='0' dur='1s' begin='0.8333333333333334s' repeatCount='indefinite'/></rect><rect  x='46.5' y='40' width='7' height='20' rx='5' ry='5' fill='#cfbe27' transform='rotate(330 50 50) translate(0 -30)'>  <animate attributeName='opacity' from='1' to='0' dur='1s' begin='0.9166666666666666s' repeatCount='indefinite'/></rect></svg>
+            </div>
+            <div class="modal-footer">
+                <div class="left-side">
+
+                </div>
+                <div class="divider"></div>
+                <div class="right-side">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--    end modal -->

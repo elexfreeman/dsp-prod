@@ -1,0 +1,1 @@
+<div class="alert alert-danger" role="alert">Поля <b>Фамилия</b> и <b>Имя</b> должны быть заполненны!</div>

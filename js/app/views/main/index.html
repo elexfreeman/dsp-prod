@@ -1,0 +1,158 @@
+<div class="wrapper">
+    <div class="sidebar" data-background-color="white" data-active-color="danger">
+
+        <!--
+            Tip 1: you can change the color of the sidebar's background using: data-background-color="white | black"
+            Tip 2: you can change the color of the active button using the data-active-color="primary | info | success | warning | danger"
+        -->
+
+        <div class="sidebar-wrapper">
+            <div class="logo">
+                <a href="http://www.creative-tim.com" class="simple-text">
+                    МИАЦ - диспансеризация
+                </a>
+            </div>
+
+            <ul class="nav">
+                <li class="active">
+                    <a href="" ng-click="toLink('')">
+                        <i class="ti-panel"></i>
+                        <p>Рабочий стол</p>
+                    </a>
+                </li>
+                <li>
+                    <a href="" ng-click="toLink('dispPlan')">
+                        <i class="ti-pie-chart"></i>
+                        <p>План диспансеризации</p>
+                    </a>
+                </li>
+                <li>
+                    <a href="" ng-click="toLink('proflPlan')">
+                        <i class="ti-support"></i>
+                        <p>План профилактических осмотров</p>
+                    </a>
+                </li>
+                <li>
+                    <a href="" ng-click="toLink('loader')">
+                        <i class="ti-reload"></i>
+                        <p>Загрузка<br>актуального среза РС ЕРЗЛ</p>
+                    </a>
+                </li>
+                <li>
+                    <a ng-click="Logout()" class="pointer">
+                        <i class="ti-arrow-top-right"></i>
+                        <p>Выход</p>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="main-panel">
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar bar1"></span>
+                        <span class="icon-bar bar2"></span>
+                        <span class="icon-bar bar3"></span>
+                    </button>
+                    <a class="navbar-brand" href="#">Рабочий стол</a>
+                </div>
+                <div class="collapse navbar-collapse">
+                    <ul class="nav navbar-nav navbar-right">
+
+                        <li>
+                            <a ng-click="Logout()" class="pointer">
+                                <i class="ti-arrow-top-right"></i>
+                                <p>Выход</p>
+                            </a>
+                        </li>
+                    </ul>
+
+                </div>
+            </div>
+        </nav>
+
+
+        <div class="content">
+            <div class="container-fluid">
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card pointer" ng-click="toLink('dispPlan')">
+                            <div class="header">
+                                <h4 class="title">План по диспансеризации</h4>
+                                <!--<p class="category">Last Campaign Performance</p>-->
+                            </div>
+                            <div class="content">
+                                <div id="chartPreferences" class="ct-chart ct-perfect-fourth">
+
+                                </div>
+
+                                <div class="footer">
+                                    <div class="chart-legend">
+                                      <!--  <i class="fa fa-circle text-info"></i> Open
+                                        <i class="fa fa-circle text-danger"></i> Bounce
+                                        <i class="fa fa-circle text-warning"></i> Unsubscribe-->
+                                    </div>
+                                    <hr>
+                                    <div class="stats">
+                                       <!-- <i class="ti-timer"></i> Campaign sent 2 days ago-->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card pointer" ng-click="toLink('proflPlan')">
+                            <div class="header">
+                                <h4 class="title">План по профилактическим осмотрам</h4>
+                                <!--<p class="category">Last Campaign Performance</p>-->
+                            </div>
+                            <div class="content">
+                                <div id="chartPreferences" class="ct-chart ct-perfect-fourth">
+
+                                </div>
+
+                                <div class="footer">
+                                    <div class="chart-legend">
+                                      <!--  <i class="fa fa-circle text-info"></i> Open
+                                        <i class="fa fa-circle text-danger"></i> Bounce
+                                        <i class="fa fa-circle text-warning"></i> Unsubscribe-->
+                                    </div>
+                                    <hr>
+                                    <div class="stats">
+                                    <!--    <i class="ti-timer"></i> Campaign sent 2 days ago-->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+            </div>
+        </div>
+
+
+        <!--<footer class="footer">
+            <div class="container-fluid">
+                <nav class="pull-left">
+                    <ul>
+
+                        <li>
+                            <a href="http://medlan.samara.ru">
+                                МИАЦ 2017
+                            </a>
+                        </li>
+
+                    </ul>
+                </nav>
+                <div class="copyright pull-right">
+                    &copy; 2017, сделано с  <i class="fa fa-heart heart"></i>  <a href="https://vk.com/id20267596">elex</a>
+                </div>
+            </div>
+        </footer>-->
+
+    </div>
+</div>
