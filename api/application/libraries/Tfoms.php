@@ -94,15 +94,14 @@ class Tfoms
         $output = $this->wssecurity_text_header();
         try {
             $res =  $this->soap->__soapCall('disp_plan_create', array($a),$a,$output);
+
         }catch(SoapFault $fault) {
 
             $res = $this->soap->__getLastResponse();
-            echo $this->soap->__getLastResponseHeaders();
-            echo $this->soap->__getLastResponse();
-            echo $fault->getMessage();
-            echo $fault->faultstring;
-            print_r($a);
-            print_r($output);
+            echo $this->soap->__getLastRequestHeaders()."<br>";
+            echo $this->soap->__getLastRequest()."<br>";
+
+            print_r($fault->detail);
 
         }
 
@@ -147,6 +146,136 @@ class Tfoms
 
     public function getTypes(){
        return $this->soap->__getTypes();
+    }
+
+    public function TestCurl(){
+        $arg = array();
+        $arg['user_id'] = 2401;
+       // $arg['guid'] = $this->tfoms->GUID();
+        $arg['disp_year'] = 2017;
+        $arg['disp_quarter'] = 1;
+        $arg['disp_type'] = 1;
+        $arg['disp_lpu'] = 502;
+        $arg['age'] = 57;
+        $arg['lgg_code'] = '';
+        $arg['drcode'] = '';
+        $arg['speccode'] = '';
+        $arg['refusal_reason'] = '';
+        $arg['disp_start'] = '';
+        //$arg['date_planning'] = '08.08.2017';
+        $arg['stage_1_result'] = '';
+        $arg['stage_2_result'] = '';
+        $arg['enp'] = '6356930839001091';
+
+        $send = "";
+        foreach ($arg as $key => $value) {
+            $send.="<".$key.">".$value."</".$key.">";
+
+        }
+
+
+
+
+        // xml post structure
+
+        $xml_post_string = '<?xml version="1.0" encoding="UTF-8"?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns1="http://sync.service.riemk.imc.com/" xmlns:ns2="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd"><SOAP-ENV:Header>
+        <wsse:Security SOAP-ENV:mustUnderstand="1" xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
+            <wsse:UsernameToken>
+                <wsse:Username>' . $this->username . '</wsse:Username>
+                <wsse:Password>' . $this->password . '</wsse:Password>
+            </wsse:UsernameToken>
+        </wsse:Security>
+    </SOAP-ENV:Header>
+    <SOAP-ENV:Body>
+    <ns1:disp_plan_create>
+            <DISP_PLAN>
+                <guid>4FB5446A-DC3B-406C-BA09-D5A1259675C8</guid>
+                <enp>2147483647</enp>
+                <disp_year>2017</disp_year>
+                <disp_quarter>1</disp_quarter>
+                <disp_type>1</disp_type>
+                <disp_lpu>502</disp_lpu>
+                <age>57</age><lgg_code>0</lgg_code>
+                <drcode></drcode>
+                <speccode>0</speccode>
+                <refusal_reason>0</refusal_reason>
+                <disp_start></disp_start>
+                <stage_1_result>0</stage_1_result>
+                <stage_2_result>0</stage_2_result>
+                <date_planning>2017-08-08</date_planning>
+                <disp_start>2017-08-08</disp_start>
+                <user_id>2401</user_id></DISP_PLAN>
+        </ns1:disp_plan_create>
+    </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>';
+
+        $xml_post_string = '<?xml version="1.0" encoding="UTF-8"?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns1="http://sync.service.riemk.imc.com/" xmlns:ns2="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd"><SOAP-ENV:Header>
+        <wsse:Security SOAP-ENV:mustUnderstand="1" xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
+            <wsse:UsernameToken>
+                <wsse:Username>' . $this->username . '</wsse:Username>
+                <wsse:Password>' . $this->password . '</wsse:Password>
+            </wsse:UsernameToken>
+        </wsse:Security>
+    </SOAP-ENV:Header>
+    <SOAP-ENV:Body>
+    <ns1:disp_plan_create>
+            <DISP_PLAN>
+                <guid>4FB5446A-DC3B-406C-BA09-D5A1259675C8</guid>
+                <enp>2147483647</enp>
+                <disp_year>2017</disp_year>
+                <disp_quarter>1</disp_quarter>
+                <disp_type>1</disp_type>
+                <disp_lpu>502</disp_lpu>
+                <age>57</age><lgg_code>0</lgg_code>
+                <drcode></drcode>
+                <speccode>0</speccode>
+                <refusal_reason>0</refusal_reason>
+                <stage_1_result>0</stage_1_result>
+                <stage_2_result>0</stage_2_result>
+                <date_planning>2017-08-08</date_planning>
+                <user_id>2401</user_id></DISP_PLAN>
+        </ns1:disp_plan_create>
+    </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>';
+
+           $headers = array(
+                        "Content-type: text/xml;charset=\"utf-8\"",
+                        "Accept: text/xml",
+                        "Cache-Control: no-cache",
+                        "Pragma: no-cache",
+                        "SOAPAction: ''",
+                        "Content-length: ".strlen($xml_post_string),
+                    ); //SOAPAction: your op URL
+
+            $url = "http://".$this->address.":".$this->port;
+            $url = 'http://11.0.0.14:8080/riisz/sync/services?xsd=1';
+
+            // PHP cURL  for https connection with auth
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_USERPWD, $this->username.":".$this->password); // username and password - declared at the top of the doc
+            curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_ANY);
+            curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $xml_post_string); // the SOAP request
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+            // converting
+            $response = curl_exec($ch);
+            curl_close($ch);
+
+            // converting
+            $response1 = str_replace("<soap:Body>","",$response);
+            $response2 = str_replace("</soap:Body>","",$response1);
+
+            // convertingc to XML
+            $parser = simplexml_load_string($response2);
+
+        print_r($response);
     }
 
 

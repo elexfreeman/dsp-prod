@@ -383,8 +383,8 @@ class Dsp_patients extends CI_Controller {
         $arg['drcode'] = '';
         $arg['speccode'] = '';
         $arg['refusal_reason'] = '';
-        $arg['disp_start'] = '';
-        //$arg['date_planning'] = '08.08.2017';
+        /*$arg['disp_start'] = '';*/
+        $arg['date_planning'] = '2017-08-08';
         $arg['stage_1_result'] = '';
         $arg['stage_2_result'] = '';
         $arg['enp'] = '6356930839001091';
@@ -396,7 +396,7 @@ class Dsp_patients extends CI_Controller {
         echo $result->faultstring;
         echo $this->tfoms->soap->__getLastRequest();*/
 
-        print_r($result);
+        //print_r($result);
     }
 
     public function CheckLoadPlans(){
@@ -471,7 +471,8 @@ class Dsp_patients extends CI_Controller {
 
     public function LoadUsers(){
         if (($handle = fopen($_SERVER['DOCUMENT_ROOT']."/zz.csv", "r")) !== FALSE) {
-            while (($data = fgetcsv($handle, 1000, ";")) !== FALSE) {
+            while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
+
 
                 //$user = $this->auth_model->GetUserByName($data[0]);
                 /*вставляем*/
@@ -488,11 +489,18 @@ class Dsp_patients extends CI_Controller {
                 $arg['DRCODE'] = mb_convert_encoding($data[3],"Windows-1251","UTF-8");
                 $arg['password'] = $this->elex->PassGen();
 
-                if($this->auth_model->AddUser2($arg)) print_r($arg);
+
+
+                //if($this->auth_model->AddUser2($arg))
+                    print_r($arg);
 
             }
             fclose($handle);
         }
+    }
+
+    public function TestWSDL(){
+        $this->tfoms->TestCurl();
     }
 
 }
