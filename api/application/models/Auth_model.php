@@ -287,14 +287,18 @@ class Auth_model extends CI_Model
 
 
     public function UpdateUserTfoms($arg){
-        $sql="UPDATE [DISP_WEB].[dbo].[users]
+
+
+        $sql="
+set dateformat ymd;
+UPDATE [DISP_WEB].[dbo].[users]
            SET [tfoms_date_planning] = '".$arg['tfoms_date_planning']."',
             [tfoms_password] = '".$arg['tfoms_password']."',
             [tfoms_user_id] = '".$arg['tfoms_user_id']."',
             [tfoms_username] = '".$arg['tfoms_username']."'
 
          WHERE id = '".$_SESSION['auth']['id']."'";
-
+echo $sql;
         $this->db_mssql->conn_id->query($sql);
     }
 
