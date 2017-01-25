@@ -8,6 +8,34 @@ var controllers_url = base_url+'js/app/controllers/';
 
 var dspApp = angular.module('dspApp', ['ngAnimate','ngResource','ngSanitize','ngRoute', 'httpPostFix','bsTable']);
 
+var navbar = [
+    {
+        caption:'Рабочий стол',
+        link:'',
+        icon:'ti-panel'
+    },
+    {
+        caption:'План диспансеризации',
+        link:'dispPlan',
+        icon:'ti-pie-chart'
+    },
+    {
+        caption:'План профилактических осмотров',
+        link:'proflPlan',
+        icon:'ti-support'
+    },
+    {
+        caption:'Загрузка<br>актуального среза РС ЕРЗЛ',
+        link:'loader',
+        icon:'ti-reload'
+    },
+    {
+        caption:'Настройки',
+        link:'settings',
+        icon:'ti-settings'
+    },
+]
+
 dspApp.config([
     '$routeProvider', '$locationProvider',
     function($routeProvide, $locationProvider){
@@ -48,6 +76,10 @@ dspApp.config([
                 templateUrl:views_url + 'loader/thx.html',
                 controller:'loaderCtrl'
             })
+            .when(base_url+'settings',{
+                templateUrl:views_url + 'main/settings.html',
+                controller:'settingsCtrl'
+            })
             /*другая страница*/
             /*todo 303 redirect*/
             .otherwise({
@@ -60,6 +92,7 @@ dspApp.config([
 /*загружаем в память шаблоны*/
 dspApp.run(function($rootScope,$templateCache, $http) {
     /*Заголовок страницы*/
+    $rootScope.navbar = navbar;
 
     /*загружаем шаблоны в память чтобы потом летало*/
     $http.get(views_url + 'main/index.html')

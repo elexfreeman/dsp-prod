@@ -501,4 +501,8 @@ class Dsp_patients extends CI_Controller {
         $this->tfoms->TestCurl();
     }
 
+    public function PhpInfo(){
+        phpinfo();
+    }
+
 }

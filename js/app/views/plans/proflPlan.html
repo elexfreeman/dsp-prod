@@ -14,28 +14,10 @@
             </div>
 
             <ul class="nav">
-                <li>
-                    <a href="" ng-click="toLink('')">
-                        <i class="ti-panel"></i>
-                        <p>Рабочий стол</p>
-                    </a>
-                </li>
-                <li>
-                    <a href="" ng-click="toLink('dispPlan')">
-                        <i class="ti-pie-chart"></i>
-                        <p>План диспансеризации</p>
-                    </a>
-                </li>
-                <li class="active">
-                    <a href="" ng-click="toLink('proflPlan')">
-                        <i class="ti-support"></i>
-                        <p>План профилактических осмотров</p>
-                    </a>
-                </li>
-                <li>
-                    <a href="" ng-click="toLink('loader')">
-                        <i class="ti-reload"></i>
-                        <p>Загрузка<br>актуального среза РС ЕРЗЛ</p>
+                <li ng-repeat="n in navbar">
+                    <a href="" ng-click="toLink(n.link)">
+                        <i ng-class="n.icon"></i>
+                        <p ng-bind-html="n.caption"></p>
                     </a>
                 </li>
                 <li>
