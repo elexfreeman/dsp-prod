@@ -489,9 +489,7 @@ class Dsp_patients extends CI_Controller {
                 $arg['DRCODE'] = mb_convert_encoding($data[3],"Windows-1251","UTF-8");
                 $arg['password'] = $this->elex->PassGen();
 
-
-
-                //if($this->auth_model->AddUser2($arg))
+                if($this->auth_model->AddUser2($arg))
                     print_r($arg);
 
             }
