@@ -132,6 +132,13 @@ class Auth_model extends CI_Model
         return $this->auth;
     }
 
+    public function GetRegUserInfo(){
+        $sql="SELECT *
+  FROM [DISP_WEB].[dbo].[users] where id=".$_SESSION['auth']['id'];
+        $query = $this->db_mssql->conn_id->query($sql);
+        return $this->elex->row_array($query);
+    }
+
     public function IsLogin()
     {
         if(isset($_SESSION['auth']))
@@ -275,6 +282,20 @@ class Auth_model extends CI_Model
 
         }
         else return false;
+    }
+
+
+
+    public function UpdateUserTfoms($arg){
+        $sql="UPDATE [DISP_WEB].[dbo].[users]
+           SET [tfoms_date_planning] = '".$arg['tfoms_date_planning']."',
+            [tfoms_password] = '".$arg['tfoms_password']."',
+            [tfoms_user_id] = '".$arg['tfoms_user_id']."',
+            [tfoms_username] = '".$arg['tfoms_username']."'
+
+         WHERE id = '".$_SESSION['auth']['id']."'";
+
+        $this->db_mssql->conn_id->query($sql);
     }
 
 }

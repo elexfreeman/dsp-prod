@@ -198,4 +198,29 @@ class Dsp_auth extends CI_Controller {
         echo json_encode(['status'=>1]);
 
     }
+
+    public function GetUserSettings(){
+
+        echo json_encode($this->auth_model->GetRegUserInfo());
+
+    }
+
+    public function SettingsSave(){
+        if($this->auth_model->IsLogin()){
+            $arg = [];
+            $arg['tfoms_date_planning'] = $this->input->post('tfoms_date_planning');
+            $arg['tfoms_password'] = $this->input->post('tfoms_password');
+            $arg['tfoms_user_id'] = $this->input->post('tfoms_user_id');
+            $arg['tfoms_username'] = $this->input->post('tfoms_username');
+
+            $this->auth_model->UpdateUserTfoms($arg);
+            echo json_encode(['status'=>1,'post'=>$_POST]);
+        }
+
+        else
+        {
+            echo json_encode(['status'=>0]);
+        }
+
+    }
 }
