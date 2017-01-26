@@ -447,11 +447,15 @@ class Dsp_patients extends CI_Controller {
 
 
 
-                $d = $this->GetFilterParams($data,$patient);
-                $data = $d['data'];
-                $arg = $d['arg'];
-                $arg['lpucode'] = $res['user']['lpucode'];
-                $res['patients']['rows'] = $this->patient_model->GetPatientsAll($arg);
+            $d = $this->GetFilterParams($data,$patient);
+            $data = $d['data'];
+            $arg = $d['arg'];
+            $arg['lpucode'] = $res['user']['lpucode'];
+            $arg['chk1']='true';
+            $arg['chk2']='true';
+            $arg['chk3']='true';
+            $arg['chk4']='true';
+            $res['patients']['rows'] = $this->patient_model->GetPatientsAll($arg);
 
 
         } else {
@@ -503,6 +507,65 @@ class Dsp_patients extends CI_Controller {
 
     public function PhpInfo(){
         phpinfo();
+    }
+
+    public function SendTfoms(){
+        $res = array();
+       // if($this->auth_model->IsLogin()) {
+            $res['auth'] = 1;
+            $res['user'] = $this->auth_model->UserInfo();
+
+            $data = $this->input->post('data');
+            $patient = $this->input->post('patient');
+            $d = $this->GetFilterParams($data,$patient);
+            $data = $d['data'];
+            $arg = $d['arg'];
+            $arg['lpucode'] = 3408;
+            $arg['chk1']='true';
+            $arg['chk2']='true';
+            $arg['chk3']='true';
+            $arg['chk4']='true';
+            $res['patients']['rows'] = $this->patient_model->GetPatientsAll($arg);
+
+            $send_data = [];
+            /*перебераем пациентов*/
+            $i=0;
+            foreach($res['patients']['rows'] as $p){
+                $i++;
+                unset($arg);
+                unset($send_data);
+                $send_data = [];
+                $arg = array();
+                $arg['user_id'] = 2401;
+                $arg['guid'] = $this->tfoms->GUID();
+                $arg['disp_year'] = $p['disp_year'];
+                $arg['disp_quarter'] = 1;
+                $arg['disp_type'] = 1;
+                $arg['disp_lpu'] = $p['disp_lpu'];
+                $arg['age'] = $p['age'];
+                $arg['lgg_code'] = '';
+                $arg['drcode'] = '';
+                $arg['speccode'] = '';
+                $arg['refusal_reason'] = '';
+                /*$arg['disp_start'] = '';*/
+                $arg['date_planning'] = '2017-08-08';
+                $arg['stage_1_result'] = '';
+                $arg['stage_2_result'] = '';
+                $arg['enp'] = $p['enp'];
+                $send_data[]=array('DISP_PLAN'=>(object)$arg);
+                $this->tfoms->disp_plan_create($send_data);
+                print_r($arg);
+                echo "============= ".$i." ==================="."\n\r";
+
+
+
+                //if($i>3) break;
+            }
+      /*  } else {
+            $res['auth'] = 0;
+        }*/
+
+
     }
 
 }

@@ -89,23 +89,23 @@ class Tfoms
     Описание функции: передача из МИС сведений о планах диспансеризации прикрепленного населения на текущий календарный год.
     Участники, предоставляющие данные: МО, к которым прикреплены граждане, включенные в план диспансеризации.*/
     public function disp_plan_create($arg){
-        $a = array('DISP_PLAN'=>(object)$arg);
+       // $a = array('DISP_PLAN'=>(object)$arg);
 
         $output = $this->wssecurity_text_header();
         try {
-            $res =  $this->soap->__soapCall('disp_plan_create', array($a),$a,$output);
+            $res =  $this->soap->__soapCall('disp_plan_create', $arg,$arg,$output);
 
         }catch(SoapFault $fault) {
 
-            $res = $this->soap->__getLastResponse();
-            echo $this->soap->__getLastRequestHeaders()."<br>";
-            echo $this->soap->__getLastRequest()."<br>";
+            //$res = $this->soap->__getLastResponse();
+            //echo $this->soap->__getLastRequestHeaders()."<br>";
+            //echo $this->soap->__getLastRequest()."<br>";
 
-            print_r($fault->detail);
+            return $fault->detail;
 
         }
 
-        return $res;
+        return true;
 
 
     }
