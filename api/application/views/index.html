@@ -1,11 +1,35 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title>403 Forbidden</title>
-</head>
-<body>
-
-<p>Directory access is forbidden.</p>
-
-</body>
-</html>
+<?xml version="1.0" encoding="UTF-8"?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
+                   xmlns:ns1="http://sync.service.riemk.imc.com/"
+                   xmlns:ns2="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
+    <SOAP-ENV:Header>
+        <wsse:Security SOAP-ENV:mustUnderstand="1"
+                       xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
+            <wsse:UsernameToken>
+                <wsse:Username>3408dorofeeva</wsse:Username>
+                <wsse:Password>579befoRe</wsse:Password>
+            </wsse:UsernameToken>
+        </wsse:Security>
+    </SOAP-ENV:Header>
+    <SOAP-ENV:Body>
+        <ns1:disp_plan_create>
+            <DISP_PLAN>
+                <guid>67A67D0A-CA7D-4283-86B4-9123454BC048</guid>
+                <enp>2147483647</enp>
+                <disp_year>2017</disp_year>
+                <disp_quarter>2</disp_quarter>
+                <disp_type>1</disp_type>
+                <disp_lpu>3408</disp_lpu>
+                <age>42</age>
+                <lgg_code>0</lgg_code>
+                <drcode></drcode>
+                <speccode>0</speccode>
+                <refusal_reason>0</refusal_reason>
+                <stage_1_result>0</stage_1_result>
+                <stage_2_result>0</stage_2_result>
+                <date_planning>2017-04-01</date_planning>
+                <user_id>2710</user_id>
+            </DISP_PLAN>
+        </ns1:disp_plan_create>
+    </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>

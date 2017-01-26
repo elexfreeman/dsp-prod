@@ -234,8 +234,7 @@ class Dsp_patients extends CI_Controller {
             $arg['stage_2_result'] = '';
             $arg['guid'] = '';
             $arg['speccode'] = '';
-
-            $this->patient_model->InsertPatientStatus($arg);
+            $res['id'] = $this->patient_model->InsertPatientStatus($arg);
 
 
         } else {
@@ -445,16 +444,14 @@ class Dsp_patients extends CI_Controller {
             $data = $this->input->post('data');
             $patient = $this->input->post('patient');
 
-
-
             $d = $this->GetFilterParams($data,$patient);
             $data = $d['data'];
             $arg = $d['arg'];
             $arg['lpucode'] = $res['user']['lpucode'];
-            $arg['chk1']='true';
+           /* $arg['chk1']='true';
             $arg['chk2']='true';
             $arg['chk3']='true';
-            $arg['chk4']='true';
+            $arg['chk4']='true';*/
             $res['patients']['rows'] = $this->patient_model->GetPatientsAll($arg);
 
 
@@ -509,6 +506,13 @@ class Dsp_patients extends CI_Controller {
         phpinfo();
     }
 
+    public function get_manual_processing_errors(){
+        $res = $this->tfoms->get_manual_all_lists();
+        foreach( $res as $r){
+            print_r($r);
+        }
+    }
+
     public function SendTfoms(){
         $res = array();
        // if($this->auth_model->IsLogin()) {
@@ -525,36 +529,84 @@ class Dsp_patients extends CI_Controller {
             $arg['chk2']='true';
             $arg['chk3']='true';
             $arg['chk4']='true';
+
+            $arg['chk4']='true';
             $res['patients']['rows'] = $this->patient_model->GetPatientsAll($arg);
 
             $send_data = [];
             /*перебераем пациентов*/
             $i=0;
             foreach($res['patients']['rows'] as $p){
+                print_r($p);
                 $i++;
                 unset($arg);
                 unset($send_data);
                 $send_data = [];
+                $this->tfoms->username = '3408dorofeeva';
+                $this->tfoms->password = '579befoRe';
                 $arg = array();
-                $arg['user_id'] = 2401;
-                $arg['guid'] = $this->tfoms->GUID();
+                $arg['guid'] =$this->patient_model->GetGuidByEnp($p['enp']);
+                $arg['enp'] = strval($p['enp']);
                 $arg['disp_year'] = $p['disp_year'];
-                $arg['disp_quarter'] = 1;
+                $arg['disp_quarter'] = $p['disp_quarter'];
+                $arg['disp_type'] = 1;
+                $arg['disp_lpu'] = $p['disp_lpu'];
+                $arg['age'] = $p['age'];
+                //$arg['lgg_code'] = '';
+                $arg['drcode'] = $p['drcode'];
+                $arg['speccode'] = $p['speccode'];
+               /* $arg['refusal_reason'] = '';
+                $arg['stage_1_result'] = '';
+                $arg['stage_2_result'] = '';*/
+                $arg['date_planning'] = date('Y-m-d');
+                $arg['user_id'] = 2710;
+                /*$arg['disp_start'] = '';*/
+
+
+                print_r($this->tfoms->disp_plan_createCurl($arg));
+                /*для тфомса*/
+                $send_data[]=array('DISP_PLAN'=>$arg);
+
+                /*                $arg = new stdClass();
+                $arg->user_id = 2710;
+                $arg->guid =$this->patient_model->GetGuidByEnp($p['enp']);
+                $arg->disp_year = $p['disp_year'];
+                $arg->disp_quarter = $p['disp_quarter'];
+                $arg->disp_type = 1;
+                $arg->disp_lpu = $p['disp_lpu'];
+                $arg->age = $p['age'];
+                $arg->lgg_code = '';
+                $arg->drcode = '';
+                $arg->speccode = '';
+                $arg->refusal_reason = '';
+                $arg['disp_start'] = '';
+                $arg->date_planning = $this->patient_model->Get_date_planning( $p['disp_year'], $p['disp_quarter']);
+                $arg->stage_1_result = '';
+                $arg->stage_2_result = '';
+                $arg->enp = (string)$p['enp'].'';*/
+
+                /*для записи в базу*/
+                $arg = array();
+                $arg['enp'] = strval($p['enp']);
+                $arg['status'] = 2;//Пытались отправить в тфомс
+                $arg['disp_year'] = $p['disp_year'];
+                $arg['disp_quarter'] = $p['disp_quarter'];
                 $arg['disp_type'] = 1;
                 $arg['disp_lpu'] = $p['disp_lpu'];
                 $arg['age'] = $p['age'];
                 $arg['lgg_code'] = '';
                 $arg['drcode'] = '';
-                $arg['speccode'] = '';
                 $arg['refusal_reason'] = '';
-                /*$arg['disp_start'] = '';*/
-                $arg['date_planning'] = '2017-08-08';
+                $arg['disp_start'] = '';
                 $arg['stage_1_result'] = '';
                 $arg['stage_2_result'] = '';
-                $arg['enp'] = $p['enp'];
-                $send_data[]=array('DISP_PLAN'=>(object)$arg);
-                $this->tfoms->disp_plan_create($send_data);
-                print_r($arg);
+                $arg['guid'] = '';
+                $arg['speccode'] = '';
+                //$res['id'] = $this->patient_model->InsertPatientStatus($arg);
+
+
+                //print_r($arg);
+                print_r($send_data);
                 echo "============= ".$i." ==================="."\n\r";
 
 

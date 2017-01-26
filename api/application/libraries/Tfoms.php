@@ -98,8 +98,8 @@ class Tfoms
         }catch(SoapFault $fault) {
 
             //$res = $this->soap->__getLastResponse();
-            //echo $this->soap->__getLastRequestHeaders()."<br>";
-            //echo $this->soap->__getLastRequest()."<br>";
+            echo $this->soap->__getLastRequestHeaders()." \n\r";
+            echo $this->soap->__getLastRequest()."\n\r";
 
             return $fault->detail;
 
@@ -148,24 +148,8 @@ class Tfoms
        return $this->soap->__getTypes();
     }
 
-    public function TestCurl(){
-        $arg = array();
-        $arg['user_id'] = 2401;
-       // $arg['guid'] = $this->tfoms->GUID();
-        $arg['disp_year'] = 2017;
-        $arg['disp_quarter'] = 1;
-        $arg['disp_type'] = 1;
-        $arg['disp_lpu'] = 502;
-        $arg['age'] = 57;
-        $arg['lgg_code'] = '';
-        $arg['drcode'] = '';
-        $arg['speccode'] = '';
-        $arg['refusal_reason'] = '';
-        $arg['disp_start'] = '';
-        //$arg['date_planning'] = '08.08.2017';
-        $arg['stage_1_result'] = '';
-        $arg['stage_2_result'] = '';
-        $arg['enp'] = '6356930839001091';
+    public function disp_plan_createCurl($arg){
+
 
         $send = "";
         foreach ($arg as $key => $value) {
@@ -176,11 +160,13 @@ class Tfoms
 
 
 
-        // xml post structure
-
-        $xml_post_string = '<?xml version="1.0" encoding="UTF-8"?>
-<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns1="http://sync.service.riemk.imc.com/" xmlns:ns2="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd"><SOAP-ENV:Header>
-        <wsse:Security SOAP-ENV:mustUnderstand="1" xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
+        $xml_post_string='<?xml version="1.0" encoding="UTF-8"?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
+                   xmlns:ns1="http://sync.service.riemk.imc.com/"
+                   xmlns:ns2="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
+    <SOAP-ENV:Header>
+        <wsse:Security SOAP-ENV:mustUnderstand="1"
+                       xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
             <wsse:UsernameToken>
                 <wsse:Username>' . $this->username . '</wsse:Username>
                 <wsse:Password>' . $this->password . '</wsse:Password>
@@ -188,31 +174,35 @@ class Tfoms
         </wsse:Security>
     </SOAP-ENV:Header>
     <SOAP-ENV:Body>
-    <ns1:disp_plan_create>
+        <ns1:disp_plan_create>
             <DISP_PLAN>
-                <guid>4FB5446A-DC3B-406C-BA09-D5A1259675C8</guid>
+                <guid>67A67D0A-CA7D-4283-86B4-9123454BC048</guid>
                 <enp>2147483647</enp>
                 <disp_year>2017</disp_year>
-                <disp_quarter>1</disp_quarter>
+                <disp_quarter>2</disp_quarter>
                 <disp_type>1</disp_type>
-                <disp_lpu>502</disp_lpu>
-                <age>57</age><lgg_code>0</lgg_code>
+                <disp_lpu>3408</disp_lpu>
+                <age>42</age>
+                <lgg_code>0</lgg_code>
                 <drcode></drcode>
                 <speccode>0</speccode>
                 <refusal_reason>0</refusal_reason>
-                <disp_start></disp_start>
                 <stage_1_result>0</stage_1_result>
                 <stage_2_result>0</stage_2_result>
-                <date_planning>2017-08-08</date_planning>
-                <disp_start>2017-08-08</disp_start>
-                <user_id>2401</user_id></DISP_PLAN>
+                <date_planning>2017-04-01</date_planning>
+                <user_id>2710</user_id>
+            </DISP_PLAN>
         </ns1:disp_plan_create>
     </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>';
 
-        $xml_post_string = '<?xml version="1.0" encoding="UTF-8"?>
-<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns1="http://sync.service.riemk.imc.com/" xmlns:ns2="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd"><SOAP-ENV:Header>
-        <wsse:Security SOAP-ENV:mustUnderstand="1" xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
+        $xml_post_string='<?xml version="1.0" encoding="UTF-8"?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
+                   xmlns:ns1="http://sync.service.riemk.imc.com/"
+                   xmlns:ns2="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
+    <SOAP-ENV:Header>
+        <wsse:Security SOAP-ENV:mustUnderstand="1"
+                       xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
             <wsse:UsernameToken>
                 <wsse:Username>' . $this->username . '</wsse:Username>
                 <wsse:Password>' . $this->password . '</wsse:Password>
@@ -220,25 +210,15 @@ class Tfoms
         </wsse:Security>
     </SOAP-ENV:Header>
     <SOAP-ENV:Body>
-    <ns1:disp_plan_create>
+        <ns1:disp_plan_create>
             <DISP_PLAN>
-                <guid>4FB5446A-DC3B-406C-BA09-D5A1259675C8</guid>
-                <enp>2147483647</enp>
-                <disp_year>2017</disp_year>
-                <disp_quarter>1</disp_quarter>
-                <disp_type>1</disp_type>
-                <disp_lpu>502</disp_lpu>
-                <age>57</age><lgg_code>0</lgg_code>
-                <drcode></drcode>
-                <speccode>0</speccode>
-                <refusal_reason>0</refusal_reason>
-                <stage_1_result>0</stage_1_result>
-                <stage_2_result>0</stage_2_result>
-                <date_planning>2017-08-08</date_planning>
-                <user_id>2401</user_id></DISP_PLAN>
+               '.$send.'
+            </DISP_PLAN>
         </ns1:disp_plan_create>
     </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>';
+
+        echo $xml_post_string;
 
            $headers = array(
                         "Content-type: text/xml;charset=\"utf-8\"",
@@ -248,9 +228,7 @@ class Tfoms
                         "SOAPAction: ''",
                         "Content-length: ".strlen($xml_post_string),
                     ); //SOAPAction: your op URL
-
-            $url = "http://".$this->address.":".$this->port;
-            $url = 'http://11.0.0.14:8080/riisz/sync/services?xsd=1';
+            $url = 'http://'.$this->address.":".$this->port.'/riisz/sync/services?xsd=1';
 
             // PHP cURL  for https connection with auth
             $ch = curl_init();
@@ -275,7 +253,7 @@ class Tfoms
             // convertingc to XML
             $parser = simplexml_load_string($response2);
 
-        print_r($response);
+            return $response;
     }
 
 

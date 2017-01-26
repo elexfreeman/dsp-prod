@@ -72,13 +72,13 @@ class Patient_model extends CI_Model
         $chk_status='';
         if((isset($arg['chk1']))or(isset($arg['chk2']))or(isset($arg['chk3']))or(isset($arg['chk4']))){
             $chk = '';
-            if((isset($arg['chk1'])and($arg['chk1']=='true'))) $chk_status.="or((disp_quarter = 1)and(status = 1))";
-            if((isset($arg['chk2'])and($arg['chk2']=='true'))) $chk_status.="or((disp_quarter = 2)and(status = 1))";
-            if((isset($arg['chk3'])and($arg['chk3']=='true'))) $chk_status.="or((disp_quarter = 3)and(status = 1))";
-            if((isset($arg['chk4'])and($arg['chk4']=='true'))) $chk_status.="or((disp_quarter = 4)and(status = 1))";
+            if((isset($arg['chk1'])and($arg['chk1']=='true'))) $chk_status.="or((disp_quarter = 1)and(status > 0))";
+            if((isset($arg['chk2'])and($arg['chk2']=='true'))) $chk_status.="or((disp_quarter = 2)and(status > 0))";
+            if((isset($arg['chk3'])and($arg['chk3']=='true'))) $chk_status.="or((disp_quarter = 3)and(status > 0))";
+            if((isset($arg['chk4'])and($arg['chk4']=='true'))) $chk_status.="or((disp_quarter = 4)and(status > 0))";
             if($chk_status!=''){
                 $chk_status = substr($chk_status,2);
-                $chk_status = 'and('.$chk_status.')';
+                $chk_status = 'and('.$chk_status.')and not((drcode is null) or (speccode is null))';
             }
         }
 
@@ -359,6 +359,7 @@ $chk_status
 ) y
 
 ";
+
         $query = $this->db_mssql->conn_id->query($sql);
 
 
@@ -564,6 +565,7 @@ where (pld.D_FIN is null)and((pld.LPUCODE =".$lpucode.")or(pld.LPUCHIEF=".$lpuco
 
         $sql="
 set dateformat ymd;
+
 INSERT INTO [DISP_WEB].[dbo].[disp_plan]
            ([insert_date]
            ,[enp]
@@ -582,6 +584,7 @@ INSERT INTO [DISP_WEB].[dbo].[disp_plan]
            ,[stage_1_result]
            ,[stage_2_result]
            ,[deleted])
+           OUTPUT INSERTED.id
      VALUES
            (
            '".$now."'
@@ -603,7 +606,12 @@ INSERT INTO [DISP_WEB].[dbo].[disp_plan]
           ,'0');
 ";
 
+
         $query = $this->db_mssql->conn_id->query($sql);
+       // $sql.="SELECT SCOPE_IDENTITY() AS a;";
+       // $query = $this->db_mssql->conn_id->query($sql);
+        return $this->elex->row_array($query);
+       //return $this->db_mssql->conn_id->lastInsertId();
     }
 
 
@@ -676,14 +684,14 @@ INSERT INTO [DISP_WEB].[dbo].[disp_plan]
 	    sum(case when [disp_quarter] = 2 then 1 else 0 end) as kol2,
 	    sum(case when [disp_quarter] = 3 then 1 else 0 end) as kol3,
 	    sum(case when [disp_quarter] = 4 then 1 else 0 end) as kol4
-from
- (SELECT status, disp_quarter, enp, id,
- 	   row_number() over (partition  by enp order by id desc) as rn
-  FROM [DISP_WEB].[dbo].[disp_plan] p
-  where (disp_year = ".$year.")
-  and (p.disp_lpu = ".$user['lpucode']." )
-  ) x
-  where rn = 1 and status = 1
+        from
+         (SELECT status, disp_quarter, enp, id,
+               row_number() over (partition  by enp order by id desc) as rn
+          FROM [DISP_WEB].[dbo].[disp_plan] p
+          where (disp_year = ".$year.")
+          and (p.disp_lpu = ".$user['lpucode']." )
+          ) x
+          where rn = 1 and status = 1
         ";
         $query = $this->db_mssql->conn_id->query($sql);
         return $this->elex->row_array($query);
@@ -745,6 +753,19 @@ set dateformat ymd;
         if((int)$res['cc']>0) return true;else return false;
     }
 
+
+    public function GetGuidByEnp($enp){
+        return  $this->tfoms->GUID();;
+    }
+
+    public function Get_date_planning($year,$disp_quarter){
+
+        if($disp_quarter==1) return $year.'-01-01';
+        if($disp_quarter==2) return $year.'-04-01';
+        if($disp_quarter==3) return $year.'-07-01';
+        if($disp_quarter==4) return $year.'-10-01';
+
+    }
 
 }
 
