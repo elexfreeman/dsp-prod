@@ -265,6 +265,11 @@ class Dsp_patients extends CI_Controller {
 
             $arg['month_beg'] = 1;
             $arg['month_end'] = 12;
+            $arg['chk1']='true';
+            $arg['chk2']='true';
+            $arg['chk3']='true';
+            $arg['chk4']='true';
+            $arg['chk_red']='false';
 
             $res['total'] = $this->patient_model->GetPatientsTotal($arg);
         } else {
@@ -290,6 +295,14 @@ class Dsp_patients extends CI_Controller {
 
             $arg['status'] = $this->input->post('status');
             $arg['disp_year'] = $this->input->post('disp_year');
+
+            $arg['chk1']='true';
+            $arg['chk2']='true';
+            $arg['chk3']='true';
+            $arg['chk4']='true';
+            $arg['chk4']='true';
+            $arg['chk_red']='false';
+
             $this->patient_model->CheckAllFromFilter($arg);
         } else {
             $res['auth'] = 0;
@@ -563,27 +576,9 @@ class Dsp_patients extends CI_Controller {
                 /*$arg['disp_start'] = '';*/
 
 
-                print_r($this->tfoms->disp_plan_createCurl($arg));
+               // print_r($this->tfoms->disp_plan_createCurl($arg));
                 /*для тфомса*/
                 $send_data[]=array('DISP_PLAN'=>$arg);
-
-                /*                $arg = new stdClass();
-                $arg->user_id = 2710;
-                $arg->guid =$this->patient_model->GetGuidByEnp($p['enp']);
-                $arg->disp_year = $p['disp_year'];
-                $arg->disp_quarter = $p['disp_quarter'];
-                $arg->disp_type = 1;
-                $arg->disp_lpu = $p['disp_lpu'];
-                $arg->age = $p['age'];
-                $arg->lgg_code = '';
-                $arg->drcode = '';
-                $arg->speccode = '';
-                $arg->refusal_reason = '';
-                $arg['disp_start'] = '';
-                $arg->date_planning = $this->patient_model->Get_date_planning( $p['disp_year'], $p['disp_quarter']);
-                $arg->stage_1_result = '';
-                $arg->stage_2_result = '';
-                $arg->enp = (string)$p['enp'].'';*/
 
                 /*для записи в базу*/
                 $arg = array();

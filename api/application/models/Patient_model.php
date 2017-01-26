@@ -86,6 +86,9 @@ class Patient_model extends CI_Model
         if((isset($arg['chk_red'])and($arg['chk_red']=='true'))){
             $chk_red = "(drcode is null) or (speccode is null)";
         }
+        if((isset($arg['chk_red'])and($arg['chk_red']=='false'))){
+            $chk_red = "(not((drcode is null) or (speccode is null)))";
+        }
 
         $fio = '';
         if((isset($arg['surname'])and($arg['surname']!='')))
@@ -271,7 +274,7 @@ declare @year int = 3;
 declare @lpu int = ".$lpu.";
 
 
-select *
+select   *
 from(
 select *,
 case when drcode is null or speccode is null then 1 else 0 end as error
@@ -359,6 +362,7 @@ $chk_status
 ) y
 
 ";
+        echo $sql;
 
         $query = $this->db_mssql->conn_id->query($sql);
 
