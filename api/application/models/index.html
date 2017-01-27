@@ -14,59 +14,35 @@
     <SOAP-ENV:Body>
         <ns1:disp_plan_create>
             <DISP_PLAN>
-                <guid>67A67D0A-CA7D-4283-86B4-9123454BC048</guid>
-                <enp>2147483647</enp>
+                <guid>5DF2A983-1E7A-4EDB-9BEC-541CD214D14B</guid>
+                <enp>6351810897000893</enp>
                 <disp_year>2017</disp_year>
-                <disp_quarter>2</disp_quarter>
+                <disp_quarter>3</disp_quarter>
                 <disp_type>1</disp_type>
                 <disp_lpu>3408</disp_lpu>
-                <age>42</age>
-                <lgg_code>0</lgg_code>
-                <drcode></drcode>
-                <speccode>0</speccode>
-                <refusal_reason>0</refusal_reason>
-                <stage_1_result>0</stage_1_result>
-                <stage_2_result>0</stage_2_result>
-                <date_planning>2017-04-01</date_planning>
+                <age>36</age>
+                <drcode>Ч574061</drcode>
+                <speccode>1</speccode>
+                <date_planning>2017-01-27</date_planning>
                 <user_id>2710</user_id>
             </DISP_PLAN>
         </ns1:disp_plan_create>
     </SOAP-ENV:Body>
-</SOAP-ENV:Envelope>
-
-
-<?xml version="1.0" encoding="UTF-8"?>
-<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
-                   xmlns:ns1="http://sync.service.riemk.imc.com/"
-                   xmlns:ns2="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
-    <SOAP-ENV:Header>
-        <wsse:Security SOAP-ENV:mustUnderstand="1"
-                       xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
-            <wsse:UsernameToken>
-                <wsse:Username>3408dorofeeva</wsse:Username>
-                <wsse:Password>579befoRe</wsse:Password>
-            </wsse:UsernameToken>
-        </wsse:Security>
-    </SOAP-ENV:Header>
-    <SOAP-ENV:Body>
-        <ns1:disp_plan_create>
-            <DISP_PLAN>
-                <guid>1A14559D-A7C3-4228-B9E6-B4D423371B8F</guid>
-                <enp>6355210886001448</enp>
-                <disp_year>2017</disp_year>
-                <disp_quarter>2</disp_quarter>
-                <disp_type>1</disp_type>
-                <disp_lpu>3408</disp_lpu>
-                <age>30</age>
-                <lgg_code></lgg_code>
-                <drcode></drcode>
-                <speccode></speccode>
-                <refusal_reason></refusal_reason>
-                <stage_1_result></stage_1_result>
-                <stage_2_result></stage_2_result>
-                <date_planning>2017-04-01</date_planning>
-                <user_id>2710</user_id>
-            </DISP_PLAN>
-        </ns1:disp_plan_create>
-    </SOAP-ENV:Body>
-</SOAP-ENV:Envelope>
+</SOAP-ENV:Envelope><?xml version='1.0' encoding='UTF-8'?>
+<S:Envelope xmlns:S="http://schemas.xmlsoap.org/soap/envelope/">
+    <S:Body>
+        <S:Fault xmlns:ns4="http://www.w3.org/2003/05/soap-envelope">
+            <faultcode>S:Server</faultcode>
+            <faultstring>Ошибка обработки запроса</faultstring>
+            <detail>
+                <ns2:RequestException xmlns:ns2="http://sync.service.riemk.imc.com/">
+                    <errors>
+                        <code>13</code>
+                        <guid>5df2a983-1e7a-4edb-9bec-541cd214d14b</guid>
+                    </errors>
+                    <message>Ошибка обработки запроса</message>
+                </ns2:RequestException>
+            </detail>
+        </S:Fault>
+    </S:Body>
+</S:Envelope>

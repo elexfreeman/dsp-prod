@@ -691,8 +691,24 @@ where (pld.D_FIN is null)and((pld.LPUCODE =".$lpucode.")or(pld.LPUCHIEF=".$lpuco
     }
 
     public function InsertPatientStatus($arg) {
+        /*конвертируем в cp1251*/
+        foreach($arg as $key=>$v){
+            $arg[$key] = mb_convert_encoding($arg[$key],"Windows-1251","UTF-8");
+        }
 
         $now = date('Y-m-d H:i:s');
+        if(!isset($arg['stage_1_result'])) $arg['stage_1_result']='';
+        if(!isset($arg['stage_2_result'])) $arg['stage_2_result']='';
+        if(!isset($arg['disp_start'])) $arg['disp_start']='';
+        if(!isset($arg['refusal_reason'])) $arg['refusal_reason']='';
+        if(!isset($arg['speccode'])) $arg['speccode']='';
+        if(!isset($arg['age'])) $arg['age']='';
+        if(!isset($arg['disp_lpu'])) $arg['disp_lpu']='';
+        if(!isset($arg['disp_type'])) $arg['lgg_code']=1;
+        if(!isset($arg['disp_quarter'])) $arg['disp_quarter']='';
+        if(!isset($arg['disp_year'])) $arg['disp_year']='';
+        if(!isset($arg['guid'])) $arg['guid']='';
+        if(!isset($arg['lgg_code'])) $arg['lgg_code']='';
 
         $sql="
 set dateformat ymd;
@@ -739,10 +755,9 @@ INSERT INTO [DISP_WEB].[dbo].[disp_plan]
 
 
         $query = $this->db_mssql->conn_id->query($sql);
-       // $sql.="SELECT SCOPE_IDENTITY() AS a;";
-       // $query = $this->db_mssql->conn_id->query($sql);
-        return $this->elex->row_array($query);
-       //return $this->db_mssql->conn_id->lastInsertId();
+        $res = $this->elex->row_array($query);
+        return $res['id'];
+
     }
 
 
@@ -895,8 +910,39 @@ set dateformat ymd;
         if($disp_quarter==2) return $year.'-04-01';
         if($disp_quarter==3) return $year.'-07-01';
         if($disp_quarter==4) return $year.'-10-01';
+    }
+
+    /*вставляет ошики от тфомс кот полученны после отправки на ихний сервис*/
+    public function InsertTfomsErrors($disp_plan_id,$arg){
+        $arg['message'] =  mb_convert_encoding($arg['message'],"Windows-1251","UTF-8");
+        $now = date('Y-m-d H:i:s');
+        $sql="
+set dateformat ymd;
+INSERT INTO [DISP_WEB].[dbo].[tfoms_errors]
+           (
+           [send_date]
+           ,[enp]
+           ,[error_code]
+           ,[message]
+           ,[disp_plan_id])
+           OUTPUT INSERTED.id
+     VALUES
+           (
+           '".$now."'
+           ,".$arg['enp']."
+           ,".$arg['error_code']."
+           ,'".$arg['message']."'
+           ,".$disp_plan_id."
+          )
+        ";
+
+        $query = $this->db_mssql->conn_id->query($sql);
+        $res = $this->elex->row_array($query);
+        return $res['id'];
 
     }
+
+
 
 }
 

@@ -528,7 +528,7 @@ class Dsp_patients extends CI_Controller {
 
     public function SendTfoms(){
         $res = array();
-       // if($this->auth_model->IsLogin()) {
+        if($this->auth_model->IsLogin()) {
             $res['auth'] = 1;
             $res['user'] = $this->auth_model->UserInfo();
 
@@ -549,26 +549,36 @@ class Dsp_patients extends CI_Controller {
             $send_data = [];
             /*перебераем пациентов*/
             $i=0;
+            $response = [];
             foreach($res['patients']['rows'] as $p){
-                print_r($p);
+               // print_r($p);
                 $i++;
                 unset($arg);
                 unset($send_data);
                 $send_data = [];
-                $this->tfoms->username = '3408dorofeeva';
-                $this->tfoms->password = '579befoRe';
+
+                $user = $this->auth_model->GetRegUserInfo();
+
+                $this->tfoms->username = $user['tfoms_username'];
+                $this->tfoms->password = $user['tfoms_password'];
+                $this->tfoms->user_id = $user['tfoms_user_id'];
+
+                /*статусы
+                - 0 не вкл в  план
+                - 1 помечен
+                - 2 отправлен с ошибкой
+                - 3 отправлен
+                */
+
                 $arg = array();
-                $arg['guid'] =$this->patient_model->GetGuidByEnp($p['enp']);
-                if($p['enp']==''){
-                    $arg['guid'] = $this->tfoms->GUID();
-                }
-                else{
-                    $arg['guid'] = $p['guid'];
-                }
+                if($p['guid']=='')
+                    $arg['guid'] =  $this->tfoms->GUID();
+                else $arg['guid'] = $p['guid'];
+
                 $arg['enp'] = strval($p['enp']);
                 $arg['disp_year'] = $p['disp_year'];
                 $arg['disp_quarter'] = $p['disp_quarter'];
-                $arg['disp_type'] = 1;
+                $arg['disp_type'] = '1';
                 $arg['disp_lpu'] = $p['disp_lpu'];
                 $arg['age'] = $p['age'];
                 //$arg['lgg_code'] = '';
@@ -578,45 +588,63 @@ class Dsp_patients extends CI_Controller {
                 $arg['stage_1_result'] = '';
                 $arg['stage_2_result'] = '';*/
                 $arg['date_planning'] = date('Y-m-d');
-                $arg['user_id'] = 2710;
+                $arg['user_id'] = $this->tfoms->user_id;
                 /*$arg['disp_start'] = '';*/
-
-
-               // print_r($this->tfoms->disp_plan_createCurl($arg));
-                /*для тфомса*/
-                $send_data[]=array('DISP_PLAN'=>$arg);
-
-                /*для записи в базу*/
-                $arg = array();
-                $arg['enp'] = strval($p['enp']);
-                $arg['status'] = 2;//Пытались отправить в тфомс
-                $arg['disp_year'] = $p['disp_year'];
-                $arg['disp_quarter'] = $p['disp_quarter'];
-                $arg['disp_type'] = 1;
-                $arg['disp_lpu'] = $p['disp_lpu'];
-                $arg['age'] = $p['age'];
-                $arg['lgg_code'] = '';
-                $arg['drcode'] = '';
-                $arg['refusal_reason'] = '';
-                $arg['disp_start'] = '';
-                $arg['stage_1_result'] = '';
-                $arg['stage_2_result'] = '';
-                $arg['guid'] = '';
-                $arg['speccode'] = '';
-                //$res['id'] = $this->patient_model->InsertPatientStatus($arg);
-
-
                 //print_r($arg);
-                print_r($send_data);
-                echo "============= ".$i." ==================="."\n\r";
 
 
+                $tfoms_erors = $this->tfoms->disp_plan_createCurl($arg);
+
+                /*стутусы*/
+                $status_arg = [];
+                /*статус дефаулт = 3 всехорошо*/
+                $status_arg['status'] = 3;
+                $status_arg['enp'] = $p['enp'];
+
+                if($p['guid']=='')
+                    $status_arg['guid'] =  $this->tfoms->GUID();
+                else $status_arg['guid'] = $p['guid'];
+
+                $status_arg['disp_year'] = $p['disp_year'];
+                $status_arg['disp_quarter'] = $p['disp_quarter'];
+                $status_arg['disp_type'] = '1';
+                $status_arg['disp_lpu'] = $p['disp_lpu'];
+                $status_arg['age'] = $p['age'];
+                //$arg['lgg_code'] = '';
+                $status_arg['drcode'] = $p['drcode'];
+                $status_arg['speccode'] = $p['speccode'];
+
+                /*проверяем ошибки*/
+                $p['error_code']= '';
+                $p['message']= '';
+                if($tfoms_erors===false){
+                    $p['error']= 'Сервер тфомс не доступен!';
+
+                }elseif(isset($tfoms_erors->S_Body->S_Fault->detail->ns2_RequestException->errors)){
+                    /*есть ошибки*/
+                    $status_arg['status'] = 2;
+                    $disp_plan_id = $this->patient_model->InsertPatientStatus($status_arg);
+                    $errors_arg = [];
+                    $errors_arg['enp'] = $p['enp'];
+                    $errors_arg['error_code'] = $tfoms_erors->S_Body->S_Fault->detail->ns2_RequestException->errors->code;
+                    $errors_arg['message'] = $tfoms_erors->S_Body->S_Fault->detail->ns2_RequestException->message;
+                    $this->patient_model-> InsertTfomsErrors($disp_plan_id,$errors_arg);
+                    $p['error_code']= $errors_arg['error_code'];
+                    $p['message']= $errors_arg['message'] ;
+
+                }
+                else {
+                    $disp_plan_id = $this->patient_model->InsertPatientStatus($status_arg);
+                }
+
+                $response[]=$p;
 
                 //if($i>3) break;
             }
-      /*  } else {
+            print_r($response);
+        } else {
             $res['auth'] = 0;
-        }*/
+        }
 
 
     }

@@ -245,15 +245,17 @@ class Tfoms
             // converting
             $response = curl_exec($ch);
             curl_close($ch);
-
             // converting
-            $response1 = str_replace("<soap:Body>","",$response);
-            $response2 = str_replace("</soap:Body>","",$response1);
-
+        if($response!=''){
+            $response1 = str_replace(":","_",$response);
             // convertingc to XML
-            $parser = simplexml_load_string($response2);
+            $parser = simplexml_load_string($response);
+            $xml = new SimpleXMLElement($response1);
+            // print_r($parser);
+            return $xml;
+        }
+        else return false;
 
-            return $response;
     }
 
 

@@ -8,9 +8,7 @@
 
         <div class="sidebar-wrapper">
             <div class="logo">
-                <a href=""  ng-click="toLink('')" class="simple-text">
-                    МИАЦ - диспансеризация
-                </a>
+                <a href=""  ng-click="toLink('')" class="simple-text text-center">МИАЦ <br>диспансеризация<br>{{s.lpucode}}</a>
             </div>
 
             <ul class="nav">
@@ -366,11 +364,10 @@
                                                 <td>{{a.disp_type}}</td>
                                                 <td>{{a.disp_year}}</td>
                                             </tr>
-
                                         </table>
                                     </div>
 
-                                    <button href="#fakelink" class="btn btn-fill btn-warning cursor-wait">Отправить в ТФОМС</button>
+                                    <button ng-show="s.lpucode==s.username" href="#fakelink" class="btn btn-fill btn-warning cursor-wait">Отправить в ТФОМС</button>
                                 </div>
 
                             </div>
