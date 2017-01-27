@@ -543,8 +543,8 @@ class Dsp_patients extends CI_Controller {
             $arg['chk3']='true';
             $arg['chk4']='true';
 
-            $arg['chk4']='true';
-            $res['patients']['rows'] = $this->patient_model->GetPatientsAll($arg);
+            $arg['chk_red']='false';
+            $res['patients']['rows'] = $this->patient_model->GetPatientsAll10($arg);
 
             $send_data = [];
             /*перебераем пациентов*/
@@ -559,6 +559,12 @@ class Dsp_patients extends CI_Controller {
                 $this->tfoms->password = '579befoRe';
                 $arg = array();
                 $arg['guid'] =$this->patient_model->GetGuidByEnp($p['enp']);
+                if($p['enp']==''){
+                    $arg['guid'] = $this->tfoms->GUID();
+                }
+                else{
+                    $arg['guid'] = $p['guid'];
+                }
                 $arg['enp'] = strval($p['enp']);
                 $arg['disp_year'] = $p['disp_year'];
                 $arg['disp_quarter'] = $p['disp_quarter'];
