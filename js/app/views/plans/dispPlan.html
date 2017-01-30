@@ -219,10 +219,9 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-md-2">
+                                        <div class="col-md-3">
                                             <div class="form-group">
                                                 <div>Не соответствие TMODOC </div>
-                                                <label class="" for="patinet_chk2">
                                                 <div class="col-sm-12">
                                                     <label class="" for="patinet_chk8">
                                                         <input type="checkbox" ng-change="RefreshFilter()" value="1" ng-model="patient.chk_red" id="patinet_chk8" class="radio1">
@@ -257,28 +256,47 @@
                                     <div class="row">
                                         <div class="col-sm-2">
                                             <div class="form-group">
-                                                <input type="text" ng-model="patient.surname" placeholder="Фамилия" class="form-control border-input">
+                                                <label>Фамилия:</label>
+                                                <input type="text" ng-model="patient.surname" class="form-control border-input">
                                             </div>
                                         </div>
                                        <div class="col-sm-2">
                                             <div class="form-group">
-                                                <input type="text" ng-model="patient.name" placeholder="Имя" class="form-control border-input">
+                                                <label>Имя:</label>
+                                                <input type="text" ng-model="patient.name"  class="form-control border-input">
                                             </div>
                                         </div>
                                        <div class="col-sm-2">
                                             <div class="form-group">
-                                                <input type="text" ng-model="patient.secname" placeholder="Отчество" class="form-control border-input">
+                                                <label>Отчество:</label>
+                                                <input type="text" ng-model="patient.secname" class="form-control border-input">
                                             </div>
                                         </div>
-                                        <div class="col-sm-1"></div>
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label>ЛПУ прикрепления:</label>
+                                                    <select ng-change="RefreshFilter()" class="form-control border-input" ng-model="patient.doc" >
+                                                        <option value="">-</option>
+                                                        <option ng-repeat="doc in doctors" value="{{doc.DRCODE}}">{{doc.SURNAME}} {{doc.NAME}} {{doc.SECNAME}}</option>
+                                                    </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-7">
+                                            <button href="#fakelink" class="btn btn-fill btn-success btn-sm" ng-click="CheckAllFromFilter()">Включить в план всех из текущего фильтра</button>
 
-                                       <div class="col-sm-5 text-right">
-                                           <button class="btn btn-fill btn-info" ng-click="RefreshFilter()" style="padding: 4px 17px;">
-                                               <i class="ti-filter"></i> Применить</button>
-                                           <button class="btn btn-warning" ng-click="ResetF()" style="padding: 4px 17px;">
+                                            <button href="#fakelink" class="btn btn-fill btn-error btn-sm" ng-click="UnCheckAllFromFilter()">Исключить из плана всех из текущего фильтра</button>
+                                        </div>
+                                       <div class="col-sm-2">
+
+                                       </div>
+                                        <div class="col-sm-3 text-right">
+                                            <button class="btn btn-fill btn-info  btn-sm" ng-click="RefreshFilter()" >
+                                                <i class="ti-filter"></i> Применить</button>
+                                           <button class="btn btn-warning  btn-sm" ng-click="ResetF()" >
                                                <i class="ti-reload"></i> Сбросить</button>
                                         </div>
-
                                     </div>
                                 </form>
                             </div>
@@ -299,79 +317,44 @@
 
                             <div style="overflow: auto">
                                 <div class="content text-left" style="padding-top: 0;float: left">
-                                    <button href="#fakelink" class="btn btn-fill btn-success" ng-click="CheckAllFromFilter()">Включить в план всех из текущего фильтра</button>
 
-                                    <button href="#fakelink" class="btn btn-fill btn-error" ng-click="UnCheckAllFromFilter()">Исключить из плана всех из текущего фильтра</button>
+                                    <div class="row">
+                                        <div class="col-sm-4 text-left">
+                                            <form method="post" action="/develop/api/dsp_patients/toexelFrom" style="display: inline-block">
+                                                <input name="patient[surname]" id="surname" value="" type="hidden">
+                                                <input name="patient[name]" id="name"  value="" type="hidden">
+                                                <input name="patient[secname]" id="secname"  value="" type="hidden">
+                                                <input name="patient[sex]"  id="sex" value="" type="hidden">
+                                                <input name="patient[chk1]" id="chk1"  value="" type="hidden">
+                                                <input name="patient[chk2]"  id="chk2" value="" type="hidden">
+                                                <input name="patient[chk3]"  id="chk3" value="" type="hidden">
+                                                <input name="patient[chk4]" id="chk4"  value="" type="hidden">
+                                                <input name="patient[chk_red]"  id="chk_red" value="" type="hidden">
+                                                <input name="patient[q]"  id="q" value="" type="hidden">
+                                                <input name="patient[age_beg]" id="age_beg"  value="" type="hidden">
+                                                <input name="patient[age_end]" id="age_end"  value="" type="hidden">
+                                                <input name="patient[month_beg]"  id="month_beg" value="" type="hidden">
+                                                <input name="patient[month_end]" id="month_end"  value="" type="hidden">
+                                                <input name="patient[DRCODE]" id="DRCODE"  value="" type="hidden">
+                                                <button class="btn btn-fill btn-success" type="submit">
+                                                    <i class="ti-receipt"></i>  В Excel из текущего фильтра</button>
+                                            </form>
+                                        </div>
+                                        <div class="col-sm-4 text-left">
+                                            <form method="post" action="/develop/api/dsp_patients/toexelFromInPlan" style="display: inline-block">
+                                                <button class="btn btn-fill btn-primary" type="submit">
+                                                    <i class="ti-receipt"></i>  В Excel включенных в план</button>
+                                            </form>
+                                        </div>
+                                        <div class="col-sm-4"></div>
 
-                                    <form method="post" action="/develop/api/dsp_patients/toexelFrom" style="display: inline-block">
-                                        <input name="surname" value="" type="hidden">
-                                        <input name="name" value="" type="hidden">
-                                        <input name="surname" value="" type="hidden">
-                                        <input name="secname" value="" type="hidden">
-                                        <input name="sex" value="" type="hidden">
-                                        <input name="chk1" value="" type="hidden">
-                                        <input name="chk2" value="" type="hidden">
-                                        <input name="chk3" value="" type="hidden">
-                                        <input name="chk4" value="" type="hidden">
-                                        <input name="chk_red" value="" type="hidden">
-                                        <input name="q" value="" type="hidden">
-                                        <input name="age_beg" value="" type="hidden">
-                                        <input name="age_end" value="" type="hidden">
-                                        <input name="month_beg" value="" type="hidden">
-                                        <input name="month_end" value="" type="hidden">
-                                        <input name="DRCODE" value="" type="hidden">
-                                    <button class="btn btn-fill btn-success" type="submit">В Excel</button>
-                                    </form>
-
-                                    <div style="display: none" id="exportable">
-                                        <table border="1">
-                                            <tr>
-                                                <td>ЛПУ прикрепления</td>
-                                                <td>Наименование участка</td>
-                                                <td>Участок</td>
-                                                <td>Тип участка</td>
-                                                <td>Код врача</td>
-                                                <td>Специальность врача</td>
-                                                <td>Фамилия</td>
-                                                <td>Имя</td>
-                                                <td>Отчество</td>
-                                                <td>Возраст</td>
-                                                <td>Дата рождения</td>
-                                                <td>Пол</td>
-                                                <td>ЕНП</td>
-                                                <td>ЛПУ</td>
-                                                <td>Квартал</td>
-                                                <td>Тип диспансеризации</td>
-                                                <td>Год</td>
-
-                                            </tr>
-                                            <tr ng-repeat="a in exel.rows">
-                                                <td>{{a.lpubase}}</td>
-                                                <td>{{a.NAME}}</td>
-                                                <td>{{a.lpubase_u}}</td>
-                                                <td>{{a.typeui}}</td>
-                                                <td>{{a.drcode}}</td>
-                                                <td>{{a.speccode}}</td>
-                                                <td>{{a.surname1}}</td>
-                                                <td>{{a.name1}}</td>
-                                                <td>{{a.secname1}}</td>
-                                                <td>{{a.age}}</td>
-                                                <td>{{a.birthday1}}</td>
-                                                <td>{{a.sex}}</td>
-                                                <td>{{a.enp}}</td>
-                                                <td>{{a.disp_lpu}}</td>
-                                                <td>{{a.disp_quarter}}</td>
-                                                <td>{{a.disp_type}}</td>
-                                                <td>{{a.disp_year}}</td>
-                                            </tr>
-                                        </table>
+                                        <div class="col-sm-4 text-right">
+                                            <a ng-show="s.lpucode==s.username"
+                                               href="/develop/api/dsp_patients/SendTfoms"
+                                               class="btn btn-fill btn-warning"><i class="ti-arrow-right"></i>  Отправить в ТФОМС</a>
+                                        </div>
                                     </div>
-
-                                    <a ng-show="s.lpucode==s.username"
-                                       href="/develop/api/dsp_patients/SendTfoms"
-                                       class="btn btn-fill btn-warning">Отправить в ТФОМС</a>
                                 </div>
-
                             </div>
 
                         </div>

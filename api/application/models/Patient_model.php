@@ -261,6 +261,12 @@ where  (rn between ".$offset." and ".($offset+$limit).") order by rn
         if($chk_red!='') $chk_red=' and '.$chk_red;
         $q = $params['q'];
 
+        if((!isset($arg['age_beg']))or($arg['age_beg']=='')) $arg['age_beg']=21;
+        if((!isset($arg['age_end']))or($arg['age_end']=='')) $arg['age_end']=99;
+
+        if((!isset($arg['month_beg']))or($arg['month_beg']=='')) $arg['month_beg']=1;
+        if((!isset($arg['month_end']))or($arg['month_end']=='')) $arg['month_end']=12;
+
 
         $sql="
 declare @month_beg int = ".$arg['month_beg'].";
@@ -363,6 +369,7 @@ $chk_status
 ) y
 
 ";
+
 
 
         $query = $this->db_mssql->conn_id->query($sql);

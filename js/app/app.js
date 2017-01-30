@@ -34,6 +34,11 @@ var navbar = [
         link:'settings',
         icon:'ti-settings'
     },
+    {
+        caption:'Нажмите Ctrl+F5 чтобы обновить версию программы',
+        link:'',
+        icon:'ti-help'
+    },
 ]
 
 dspApp.config([

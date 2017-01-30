@@ -468,6 +468,34 @@ class Dsp_patients extends CI_Controller {
             $res['patients']['rows'] = $this->patient_model->GetPatientsAll($arg);
 
 
+
+        } else {
+            $res['auth'] = 0;
+        }
+         $this->load->view('exel', $res);
+    }
+
+    public function toexelFromInPlan(){
+        $res = array();
+        if($this->auth_model->IsLogin()) {
+            $res['auth'] = 1;
+            $res['user'] = $this->auth_model->UserInfo();
+
+            $data = $this->input->post('data');
+            $patient = $this->input->post('patient');
+
+            $d = $this->GetFilterParams($data,$patient);
+            $data = $d['data'];
+            $arg = $d['arg'];
+            $arg['lpucode'] = $res['user']['lpucode'];
+            $arg['chk1']='true';
+            $arg['chk2']='true';
+            $arg['chk3']='true';
+            $arg['chk4']='true';
+            $arg['chk_red']='false';
+            $res['patients']['rows'] = $this->patient_model->GetPatientsAll($arg);
+
+
         } else {
             $res['auth'] = 0;
         }
