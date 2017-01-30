@@ -544,7 +544,7 @@ class Dsp_patients extends CI_Controller {
             $arg['chk4']='true';
 
             $arg['chk_red']='false';
-            $res['patients']['rows'] = $this->patient_model->GetPatientsAll10($arg);
+            $res['patients']['rows'] = $this->patient_model->GetPatientsAll($arg);
 
             $send_data = [];
             /*перебераем пациентов*/
@@ -641,7 +641,9 @@ class Dsp_patients extends CI_Controller {
 
                 //if($i>3) break;
             }
+            echo "<pre>";
             print_r($response);
+            echo "</pre>";
         } else {
             $res['auth'] = 0;
         }

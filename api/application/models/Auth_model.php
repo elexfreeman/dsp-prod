@@ -292,7 +292,8 @@ class Auth_model extends CI_Model
         $sql="
 set dateformat ymd;
 UPDATE [DISP_WEB].[dbo].[users]
-           SET [tfoms_date_planning] = '".$arg['tfoms_date_planning']."',
+           SET
+
             [tfoms_password] = '".$arg['tfoms_password']."',
             [tfoms_user_id] = '".$arg['tfoms_user_id']."',
             [tfoms_username] = '".$arg['tfoms_username']."'

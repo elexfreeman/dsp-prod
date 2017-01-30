@@ -208,7 +208,7 @@ class Dsp_auth extends CI_Controller {
     public function SettingsSave(){
         if($this->auth_model->IsLogin()){
             $arg = [];
-            $arg['tfoms_date_planning'] = $this->input->post('tfoms_date_planning');
+          //  $arg['tfoms_date_planning'] = $this->input->post('tfoms_date_planning');
             $arg['tfoms_password'] = $this->input->post('tfoms_password');
             $arg['tfoms_user_id'] = $this->input->post('tfoms_user_id');
             $arg['tfoms_username'] = $this->input->post('tfoms_username');

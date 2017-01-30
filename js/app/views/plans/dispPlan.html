@@ -367,7 +367,9 @@
                                         </table>
                                     </div>
 
-                                    <button ng-show="s.lpucode==s.username" href="#fakelink" class="btn btn-fill btn-warning cursor-wait">Отправить в ТФОМС</button>
+                                    <a ng-show="s.lpucode==s.username"
+                                       href="/develop/api/dsp_patients/SendTfoms"
+                                       class="btn btn-fill btn-warning">Отправить в ТФОМС</a>
                                 </div>
 
                             </div>
