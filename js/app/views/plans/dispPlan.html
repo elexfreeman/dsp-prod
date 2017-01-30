@@ -349,9 +349,11 @@
                                         <div class="col-sm-4"></div>
 
                                         <div class="col-sm-4 text-right">
-                                            <a ng-show="s.lpucode==s.username"
-                                               href="/develop/api/dsp_patients/SendTfoms"
-                                               class="btn btn-fill btn-warning"><i class="ti-arrow-right"></i>  Отправить в ТФОМС</a>
+                                            <form action="/develop/api/dsp_patients/SendTfoms" style="display: inline-block">
+                                            <button ng-show="s.lpucode==s.username"
+                                               type="submit"
+                                               class="btn btn-fill btn-warning"><i class="ti-arrow-right"></i>  Отправить в ТФОМС</button>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>

@@ -949,6 +949,18 @@ INSERT INTO [DISP_WEB].[dbo].[tfoms_errors]
 
     }
 
+    public function GetLpuP($lpuchief){
+        $lpuchief=(int)$lpuchief;
+        $sql="select lpubase
+        from [oms].[dbo].OMSC_INSURED_SREZ
+        where lpuchief = ".$lpuchief."
+        group by lpubase";
+        $query = $this->db_mssql->conn_id->query($sql);
+        return $this->elex->result_array($query);
+
+
+    }
+
 
 
 }
