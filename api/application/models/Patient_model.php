@@ -846,6 +846,38 @@ INSERT INTO [DISP_WEB].[dbo].[disp_plan]
           ) x
           where rn = 1 and status = 1
         ";
+
+        $sql="
+                select sum([status]) as kol,
+        sum(case when [disp_quarter] = 1 then 1 else 0 end) as kol1,
+	    sum(case when [disp_quarter] = 2 then 1 else 0 end) as kol2,
+	    sum(case when [disp_quarter] = 3 then 1 else 0 end) as kol3,
+	    sum(case when [disp_quarter] = 4 then 1 else 0 end) as kol4
+        from
+         (SELECT status, disp_quarter, dp.enp, id,
+               row_number() over (partition  by dp.enp order by id desc) as rn,
+	     (select top 1 drcode
+          from aktpak..akpc_tmodoc
+	      where d_fin is null
+		  and DBSOURCE = 'D'
+		  and isnull(LPUTER_U,0) = isnull(i.lpubase_u,0)
+		  and isnull(LPUTER,0) = isnull(i.lpubase,0)
+		  and isnull(type_u,0) = isnull(i.type_u,0)
+          order by drcode
+          )  as drcode
+
+          FROM [DISP_WEB].[dbo].[disp_plan] dp
+		  join oms..OMSC_INSURED_SREZ i on dp.enp=i.ENP
+          where (disp_year = 2017)
+          and (dp.disp_lpu = ".$user['lpucode']." )
+		  and (status = 1)
+
+          ) x
+
+          where (rn = 1)and (drcode is not null)
+
+        ";
+
         $query = $this->db_mssql->conn_id->query($sql);
         return $this->elex->row_array($query);
     }
