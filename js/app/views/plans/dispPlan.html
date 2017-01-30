@@ -275,9 +275,9 @@
                                         <div class="col-sm-3">
                                             <div class="form-group">
                                                 <label>ЛПУ прикрепления:</label>
-                                                    <select ng-change="RefreshFilter()" class="form-control border-input" ng-model="patient.doc" >
+                                                    <select ng-change="RefreshFilter()" class="form-control border-input" ng-model="patient.LpuP" >
                                                         <option value="">-</option>
-                                                        <option ng-repeat="doc in doctors" value="{{doc.DRCODE}}">{{doc.SURNAME}} {{doc.NAME}} {{doc.SECNAME}}</option>
+                                                        <option ng-repeat="l in LpuP" value="{{l.lpubase}}">{{l.lpubase}}</option>
                                                     </select>
                                             </div>
                                         </div>

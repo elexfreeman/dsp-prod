@@ -682,6 +682,7 @@ class Dsp_patients extends CI_Controller {
         if($this->auth_model->IsLogin()) {
             $res['auth'] = 1;
             $res['user'] = $this->auth_model->UserInfo();
+            $res['LpuP'] = $this->patient_model->GetLpuP($res['user']['lpucode']);
         }
         else {
             $res['auth'] = 0;
