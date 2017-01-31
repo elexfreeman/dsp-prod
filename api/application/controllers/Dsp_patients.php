@@ -565,7 +565,7 @@ class Dsp_patients extends CI_Controller {
             $d = $this->GetFilterParams($data,$patient);
             $data = $d['data'];
             $arg = $d['arg'];
-            $arg['lpucode'] = 3408;
+            $arg['lpucode'] = $res['user']['lpucode'];
             $arg['chk1']='true';
             $arg['chk2']='true';
             $arg['chk3']='true';

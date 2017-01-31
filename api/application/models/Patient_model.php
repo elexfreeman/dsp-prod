@@ -241,7 +241,6 @@ where  (rn between ".$offset." and ".($offset+$limit).") order by rn
 ";
 
 
-
         $query = $this->db_mssql->conn_id->query($sql);
         /*http://proft.me/2008/11/28/primery-ispolzovaniya-pdo/*/
         return $this->elex->result_array($query);
