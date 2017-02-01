@@ -548,9 +548,15 @@ class Dsp_patients extends CI_Controller {
     }
 
     public function get_manual_processing_errors(){
-        $res = $this->tfoms->get_manual_all_lists();
-        foreach( $res as $r){
+        $res = $this->tfoms->get_manual_processing_errors();
+
+        foreach( $res->RESULT->row as $r){
+            $r = (array)$r;
             print_r($r);
+            $arg = [];
+            $arg['error_code'] = $r['id'];
+            $arg['description'] = $r['name'];
+            $this->patient_model->InsertTfomsErrorDescr($arg);
         }
     }
 
@@ -666,12 +672,9 @@ class Dsp_patients extends CI_Controller {
                 }
 
                 $response[]=$p;
-
                 //if($i>3) break;
             }
-            echo "<pre>";
-            print_r($response);
-            echo "</pre>";
+
         } else {
             $res['auth'] = 0;
         }

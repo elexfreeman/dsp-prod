@@ -284,9 +284,9 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-sm-7">
-                                            <button href="#fakelink" class="btn btn-fill btn-success btn-sm" ng-click="CheckAllFromFilter()">Включить в план всех из текущего фильтра</button>
+                                            <button href="#fakelink" class="btn btn-fill btn-success btn-sm" ng-click="ShowChkAllModal(true)">Включить в план всех из текущего фильтра</button>
 
-                                            <button href="#fakelink" class="btn btn-fill btn-error btn-sm" ng-click="UnCheckAllFromFilter()">Исключить из плана всех из текущего фильтра</button>
+                                            <button href="#fakelink" class="btn btn-fill btn-error btn-sm" ng-click="ShowUnChkAllModal(true)">Исключить из плана всех из текущего фильтра</button>
                                         </div>
                                        <div class="col-sm-2">
 
@@ -411,5 +411,69 @@
         </div>
     </div>
 </div>
+<!--    end modal -->
 
+
+<!-- Modal -->
+<div class="modal fade" id="DialogCheck" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Выбрать всех из текущего фильтра?</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row text-center">
+                    <div class="col-sm-6">
+                        <button class="btn btn-fill btn-warning btn wd-200" ng-click="CheckAllFromFilter()">Да</button>
+                    </div>
+                    <div class="col-sm-6">
+                        <button class="btn btn-fill btn-alert  wd-200" ng-click="ShowChkAllModal(false)">Нет</button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="left-side">
+
+                </div>
+                <div class="divider"></div>
+                <div class="right-side">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--    end modal -->
+
+<!-- Modal -->
+<div class="modal fade" id="DialogUnCheck" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Исключить из плана всех из текущего фильтра?</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row text-center">
+                    <div class="col-sm-6">
+                        <button class="btn btn-fill btn-warning btn wd-200" ng-click="UnCheckAllFromFilter()">Да</button>
+                    </div>
+                    <div class="col-sm-6">
+                        <button class="btn btn-fill btn-alert  wd-200" ng-click="ShowUnChkAllModal(false)">Нет</button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="left-side">
+
+                </div>
+                <div class="divider"></div>
+                <div class="right-side">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <!--    end modal -->

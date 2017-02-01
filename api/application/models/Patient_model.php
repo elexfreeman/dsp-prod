@@ -210,6 +210,8 @@ where d_fin is null
   pld.NAME
   , i.SEX sex
   ,dp.[disp_quarter]
+  ,e.error_code
+    ,te.[description] error_code_description
 from [OMS].[dbo].[OMSC_INSURED_SREZ] i
 
 
@@ -219,6 +221,15 @@ left join ( select * ,
 
 left join [POLYCLINIC_2010].[dbo].[POLM_LPU_DISTRICTS] pld
 on (pld.NUM = i.LPUBASE_U)and(pld.LPUCODE = i.LPUBASE)and(pld.D_FIN is null) and i.type_u = pld.typedistrict
+
+
+
+left join (select disp_plan_id, error_code,
+           ROW_NUMBER() over(partition by disp_plan_id  order by id desc) as nom
+		   from disp_web..tfoms_errors) e on dp.id = e.disp_plan_id and e.nom = 1
+
+		   left join [DISP_WEB].[dbo].[tfoms_errors_descriptions] as  te
+on te.error_code = e.error_code
 
 where i.d_fin is null
   and i.lpuchief = @lpu
@@ -993,6 +1004,27 @@ INSERT INTO [DISP_WEB].[dbo].[tfoms_errors]
     }
 
 
+    public function InsertTfomsErrorDescr($arg){
+        $arg['description'] = mb_convert_encoding($arg['description'],"Windows-1251","UTF-8");
+        $sql="
+set dateformat ymd;
+INSERT INTO [DISP_WEB].[dbo].[tfoms_errors_descriptions]
+           (
+          [error_code]
+           ,[description]
+           )
+           OUTPUT INSERTED.id
+     VALUES
+           (
+           ".$arg['error_code']."
+           ,'".$arg['description']."'
+          )
+        ";
+
+        $query = $this->db_mssql->conn_id->query($sql);
+        $res = $this->elex->row_array($query);
+        return $res['id'];
+    }
 
 }
 
