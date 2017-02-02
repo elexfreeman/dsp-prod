@@ -63,7 +63,13 @@ class Patient_model extends CI_Model
         if((isset($arg['sex']))and((int)$arg['sex']>0)){
             $sex = "and(sex = ".$arg['sex'].")";
         }
-        $q='';
+
+        $error_code='';
+        if((isset($arg['error_code']))and((int)$arg['error_code']>0)){
+            $error_code = "and(error_code = ".$arg['error_code'].")";
+
+
+        }        $q='';
         if((isset($arg['q']))and((int)$arg['q']>0)){
             $q = "and(disp_quarter = ".$arg['q'].")";
         }
@@ -251,7 +257,7 @@ $chk_status
 where  (rn between ".$offset." and ".($offset+$limit).") order by rn
 ";
 
-
+echo $sql;
         $query = $this->db_mssql->conn_id->query($sql);
         /*http://proft.me/2008/11/28/primery-ispolzovaniya-pdo/*/
         return $this->elex->result_array($query);
