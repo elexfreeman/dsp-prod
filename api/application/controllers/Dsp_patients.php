@@ -296,11 +296,11 @@ class Dsp_patients extends CI_Controller {
             $arg['status'] = $this->input->post('status');
             $arg['disp_year'] = $this->input->post('disp_year');
 
-            $arg['chk1']='true';
+         /*   $arg['chk1']='true';
             $arg['chk2']='true';
             $arg['chk3']='true';
             $arg['chk4']='true';
-            $arg['chk4']='true';
+            $arg['chk4']='true';*/
             $arg['chk_red']='false';
 
             $this->patient_model->CheckAllFromFilter($arg);
