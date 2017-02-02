@@ -1026,5 +1026,13 @@ INSERT INTO [DISP_WEB].[dbo].[tfoms_errors_descriptions]
         return $res['id'];
     }
 
+    public function GetTfomsErrorsList(){
+        $sql="select *
+        from [DISP_WEB].[dbo].[tfoms_errors_descriptions]
+         order by error_code ";
+        $query = $this->db_mssql->conn_id->query($sql);
+        return $this->elex->result_array($query);
+    }
+
 }
 

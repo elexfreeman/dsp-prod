@@ -691,7 +691,19 @@ class Dsp_patients extends CI_Controller {
             $res['auth'] = 0;
         }
         echo json_encode($res);
+    }
 
+    public function GetTfomsErrorsList(){
+        $res = array();
+        if($this->auth_model->IsLogin()) {
+            $res['auth'] = 1;
+            $res['user'] = $this->auth_model->UserInfo();
+            $res['TfomsErrors'] = $this->patient_model->GetTfomsErrorsList();
+        }
+        else {
+            $res['auth'] = 0;
+        }
+        echo json_encode($res);
     }
 
 }

@@ -283,6 +283,27 @@
                                         </div>
                                     </div>
                                     <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <div>Есть ошибка после отправки в ТФОМС </div>
+                                                <div class="col-sm-12">
+                                                    <label class="" for="tfoms_error">
+                                                        <input type="checkbox" ng-change="RefreshFilter()" value="1" ng-model="patient.tfoms_error" id="tfoms_error" class="radio1">
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <label>Ошибка в ТФОМС:</label>
+                                                <select ng-change="RefreshFilter()" class="form-control border-input" ng-model="patient.error_code" >
+                                                    <option value="">-</option>
+                                                    <option ng-repeat="ee in TfomsErrors" value="{{ee.error_code}}">{{ee.error_code}}: {{ee.description}}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
                                         <div class="col-sm-7">
                                             <button href="#fakelink" class="btn btn-fill btn-success btn-sm" ng-click="ShowChkAllModal(true)">Включить в план всех из текущего фильтра</button>
 
