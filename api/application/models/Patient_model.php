@@ -954,6 +954,21 @@ set dateformat ymd;
         if((int)$res['cc']>0) return true;else return false;
     }
 
+    public function GetLoadPlans($lpu,$year){
+        $lpu = (int)$lpu;
+        $year = (int)$year;
+        $sql="
+        SELECT top 1 *
+  FROM [DISP_WEB].[dbo].[upload_erzl] p
+  where (p.lpu = ".$lpu.")and(p.[status]=2)and(p.[year]=".$year.") order by id desc
+        ";
+
+        $query = $this->db_mssql->conn_id->query($sql);
+        return $this->elex->row_array($query);
+
+
+    }
+
 
     public function GetGuidByEnp($enp){
         return  $this->tfoms->GUID();;

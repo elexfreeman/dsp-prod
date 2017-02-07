@@ -422,6 +422,8 @@ class Dsp_patients extends CI_Controller {
             $res['auth'] = 1;
             $res['user'] = $_SESSION['auth'];
             $res['CheckLoadPlans'] = $this->patient_model->CheckLoadPlans($res['user']['lpucode'],'2017');
+            $res['LoadPlans'] = $this->patient_model->GetLoadPlans($res['user']['lpucode'],'2017');
+            $res['LoadPlans'] = date('d.m.Y',strtotime($res['LoadPlans']['upload_date']));
         }
         echo json_encode($res);
     }
@@ -602,6 +604,9 @@ class Dsp_patients extends CI_Controller {
                 - 1 помечен
                 - 2 отправлен с ошибкой
                 - 3 отправлен
+                - 4 дисп начата
+                - 5 закончен 1-й этоп
+                - 6 закончен 2-й этап
                 */
 
                 $arg = array();
