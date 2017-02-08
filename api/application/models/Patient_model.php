@@ -218,6 +218,10 @@ where d_fin is null
   ,dp.[disp_quarter]
   ,e.error_code
     ,te.[description] error_code_description
+   ,dp.[disp_start]
+   ,dp.[stage_1_result]
+   ,dp.[stage_2_result]
+   ,dp.[refusal_reason]
 from [OMS].[dbo].[OMSC_INSURED_SREZ] i
 
 
@@ -257,7 +261,7 @@ $chk_status
 where  (rn between ".$offset." and ".($offset+$limit).") order by rn
 ";
 
-echo $sql;
+
         $query = $this->db_mssql->conn_id->query($sql);
         /*http://proft.me/2008/11/28/primery-ispolzovaniya-pdo/*/
         return $this->elex->result_array($query);
@@ -358,6 +362,10 @@ where d_fin is null
   ,pld.NAME
   , i.SEX sex
   ,dp.[disp_quarter]
+  ,dp.[disp_start]
+    ,dp.[stage_1_result]
+   ,dp.[stage_2_result]
+   ,dp.[refusal_reason]
 from [OMS].[dbo].[OMSC_INSURED_SREZ] i
 
 
@@ -485,6 +493,10 @@ where d_fin is null
   ,dp.guid
   , i.SEX sex
   ,dp.[disp_quarter]
+  ,dp.[disp_start]
+    ,dp.[stage_1_result]
+   ,dp.[stage_2_result]
+   ,dp.[refusal_reason]
 from [OMS].[dbo].[OMSC_INSURED_SREZ] i
 
 
@@ -512,7 +524,7 @@ $chk_status
 ) y
 
 ";
-        echo $sql;
+
 
         $query = $this->db_mssql->conn_id->query($sql);
 
@@ -646,6 +658,7 @@ $chk_status
 
 
 
+        echo $sql;
 
 
 

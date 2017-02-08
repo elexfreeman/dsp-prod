@@ -575,6 +575,7 @@ class Dsp_patients extends CI_Controller {
             $data = $d['data'];
             $arg = $d['arg'];
             $arg['lpucode'] = $res['user']['lpucode'];
+
             $arg['chk1']='true';
             $arg['chk2']='true';
             $arg['chk3']='true';
@@ -588,7 +589,36 @@ class Dsp_patients extends CI_Controller {
             $i=0;
             $response = [];
             foreach($res['patients']['rows'] as $p){
-               // print_r($p);
+
+               /*
+                * Array
+                    (
+                        [vozr] => 48
+                        [rn] => 2
+                        [user_id] =>
+                        [disp_year] => 2017
+                        [disp_type] => 1
+                        [disp_lpu] => 701
+                        [age] => 48
+                        [lpubase] => 703
+                        [lpubase_u] => 20
+                        [typeui] => 7
+                        [enp] => 6350030833001043
+                        [kol] => 70101
+                        [drcode] => С335455
+                        [speccode] => 51
+                        [surname1] => АБАИМОВ
+                        [name1] => ВЯЧЕСЛАВ
+                        [secname1] => ВИКТОРОВИЧ
+                        [birthday1] => 1969-09-16 00:00:00.000
+                        [status] => 1
+                        [NAME] =>
+                        [guid] =>
+                        [sex] => 1
+                        [disp_quarter] => 3
+                        [error] => 0
+                    )*/
+                //print_r($p);
                 $i++;
                 unset($arg);
                 unset($send_data);
@@ -620,6 +650,9 @@ class Dsp_patients extends CI_Controller {
                 $arg['disp_quarter'] = $p['disp_quarter'];
                 $arg['disp_type'] = '1';
                 $arg['disp_lpu'] = $p['disp_lpu'];
+              /*  if(($arg['lpucode']==9501)or($arg['lpucode']==4064)){
+                    $arg['lpucode'] =4061;
+                }*/
                 $arg['age'] = $p['age'];
                 //$arg['lgg_code'] = '';
                 $arg['drcode'] = $p['drcode'];
@@ -629,11 +662,33 @@ class Dsp_patients extends CI_Controller {
                 $arg['stage_2_result'] = '';*/
                 $arg['date_planning'] = date('Y-m-d');
                 $arg['user_id'] = $this->tfoms->user_id;
+                if($p['disp_start']!='1900-01-01')  $arg['disp_start'] = $p['disp_start'];
+                if($p['stage_1_result']!=0)  $arg['stage_1_result'] = $p['stage_1_result'];
+                if($p['stage_2_result']!=0)  $arg['stage_2_result'] = $p['stage_2_result'];
+                if($p['refusal_reason']!=0)  $arg['refusal_reason'] = $p['refusal_reason'];
+
                 /*$arg['disp_start'] = '';*/
                 //print_r($arg);
 
 
+                /*проверка на удаление*/
+                if($p['guid']!=''){
+                    /*Значит такая запись была отправленна*/
+                    $delete_arg=[];
+                    $delete_arg['guid'] = $p['guid'];
+                    $delete_arg['user_id'] = $this->tfoms->user_id;
+                    echo "<pre>";
+                    echo "==============DELTE================== \r\n";
+                    print_r($this->tfoms->disp_plan_deleteCurl($delete_arg));
+                    echo "</pre>";
+                }
+
+
                 $tfoms_erors = $this->tfoms->disp_plan_createCurl($arg);
+                echo "<pre>";
+                echo "==============INSERT================== \r\n";
+                print_r($tfoms_erors);
+                echo "</pre>";
 
                 /*стутусы*/
                 $status_arg = [];

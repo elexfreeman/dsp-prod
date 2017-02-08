@@ -100,9 +100,7 @@ class Tfoms
             //$res = $this->soap->__getLastResponse();
             echo $this->soap->__getLastRequestHeaders()." \n\r";
             echo $this->soap->__getLastRequest()."\n\r";
-
             return $fault->detail;
-
         }
 
         return true;
@@ -154,11 +152,7 @@ class Tfoms
         $send = "";
         foreach ($arg as $key => $value) {
             $send.="<".$key.">".$value."</".$key.">";
-
         }
-
-
-
 
         $xml_post_string='<?xml version="1.0" encoding="UTF-8"?>
 <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
@@ -215,6 +209,78 @@ class Tfoms
                '.$send.'
             </DISP_PLAN>
         </ns1:disp_plan_create>
+    </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>';
+
+        echo $xml_post_string;
+
+           $headers = array(
+                        "Content-type: text/xml;charset=\"utf-8\"",
+                        "Accept: text/xml",
+                        "Cache-Control: no-cache",
+                        "Pragma: no-cache",
+                        "SOAPAction: ''",
+                        "Content-length: ".strlen($xml_post_string),
+                    ); //SOAPAction: your op URL
+            $url = 'http://'.$this->address.":".$this->port.'/riisz/sync/services?xsd=1';
+
+            // PHP cURL  for https connection with auth
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_USERPWD, $this->username.":".$this->password); // username and password - declared at the top of the doc
+            curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_ANY);
+            curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $xml_post_string); // the SOAP request
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+            // converting
+            $response = curl_exec($ch);
+            curl_close($ch);
+            // converting
+        if($response!=''){
+            $response1 = str_replace(":","_",$response);
+            // convertingc to XML
+            $parser = simplexml_load_string($response);
+            $xml = new SimpleXMLElement($response1);
+            // print_r($parser);
+            return $xml;
+        }
+        else return false;
+
+    }
+
+
+    public function disp_plan_deleteCurl($arg){
+
+
+        $send = "";
+        foreach ($arg as $key => $value) {
+            $send.="<".$key.">".$value."</".$key.">";
+        }
+
+
+        $xml_post_string='<?xml version="1.0" encoding="UTF-8"?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
+                   xmlns:ns1="http://sync.service.riemk.imc.com/"
+                   xmlns:ns2="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
+    <SOAP-ENV:Header>
+        <wsse:Security SOAP-ENV:mustUnderstand="1"
+                       xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
+            <wsse:UsernameToken>
+                <wsse:Username>' . $this->username . '</wsse:Username>
+                <wsse:Password>' . $this->password . '</wsse:Password>
+            </wsse:UsernameToken>
+        </wsse:Security>
+    </SOAP-ENV:Header>
+    <SOAP-ENV:Body>
+        <ns1:disp_plan_delete>
+            <DELETE>
+               '.$send.'
+            </DELETE>
+        </ns1:disp_plan_delete>
     </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>';
 
