@@ -658,9 +658,6 @@ $chk_status
 
 
 
-        echo $sql;
-
-
 
         $query = $this->db_mssql->conn_id->query($sql);
         /*http://proft.me/2008/11/28/primery-ispolzovaniya-pdo/*/

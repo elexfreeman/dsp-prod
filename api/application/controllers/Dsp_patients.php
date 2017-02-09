@@ -470,12 +470,72 @@ class Dsp_patients extends CI_Controller {
             $arg['chk4']='true';*/
             $res['patients']['rows'] = $this->patient_model->GetPatientsAll($arg);
 
+            $this->load->library('excel');
+            //activate worksheet number 1
+            $this->excel->setActiveSheetIndex(0);
+            //name the worksheet
+            $this->excel->getActiveSheet()->setTitle('Диспансеризация');
+            //set cell A1 content with some text
+            $y=1;
+
+            $this->excel->getActiveSheet()->setCellValue('A'.$y,'ЛПУ прикрепления');
+            $this->excel->getActiveSheet()->setCellValue('B'.$y,'Наименование участка');
+            $this->excel->getActiveSheet()->setCellValue('C'.$y,'Участок');
+            $this->excel->getActiveSheet()->setCellValue('D'.$y,'Тип участка');
+            $this->excel->getActiveSheet()->setCellValue('E'.$y,'Код врача');
+            $this->excel->getActiveSheet()->setCellValue('F'.$y,'Специальность врача');
+            $this->excel->getActiveSheet()->setCellValue('G'.$y,'Фамилия');
+            $this->excel->getActiveSheet()->setCellValue('H'.$y,'Имя');
+            $this->excel->getActiveSheet()->setCellValue('I'.$y,'Отчество');
+            $this->excel->getActiveSheet()->setCellValue('J'.$y,'Возраст');
+            $this->excel->getActiveSheet()->setCellValue('K'.$y,'Дата рождения');
+            $this->excel->getActiveSheet()->setCellValue('L'.$y,'Пол');
+            $this->excel->getActiveSheet()->setCellValue('M'.$y,'ЕНП');
+            $this->excel->getActiveSheet()->setCellValue('N'.$y,'ЛПУ');
+            $this->excel->getActiveSheet()->setCellValue('O'.$y,'Квартал');
+            $this->excel->getActiveSheet()->setCellValue('P'.$y,'Тип диспансеризации');
+            $this->excel->getActiveSheet()->setCellValue('R'.$y,'Год');
+
+            foreach($res['patients']['rows'] as $row){
+                $y++;
+                $this->excel->getActiveSheet()->setCellValue('A'.$row['lpubase']);
+                $this->excel->getActiveSheet()->setCellValue('B'.$y,$row['NAME']);
+                $this->excel->getActiveSheet()->setCellValue('C'.$y,$row['lpubase_u']);
+                $this->excel->getActiveSheet()->setCellValue('D'.$y,$row['typeui']);
+                $this->excel->getActiveSheet()->setCellValue('E'.$y,$row['drcode']);
+                $this->excel->getActiveSheet()->setCellValue('F'.$y,$row['speccode']);
+                $this->excel->getActiveSheet()->setCellValue('G'.$y,$row['surname1']);
+                $this->excel->getActiveSheet()->setCellValue('H'.$y,$row['name1']);
+                $this->excel->getActiveSheet()->setCellValue('I'.$y,$row['secname1']);
+                $this->excel->getActiveSheet()->setCellValue('J'.$y,$row['age']);
+                $this->excel->getActiveSheet()->setCellValue('K'.$y,date('d.m.Y',strtotime($row['birthday1'])));
+                $this->excel->getActiveSheet()->setCellValue('L'.$y,$row['sex']);
+                $this->excel->getActiveSheet()->setCellValue('M'.$y,$row['enp']);
+                $this->excel->getActiveSheet()->setCellValue('N'.$y,$row['disp_lpu']);
+                $this->excel->getActiveSheet()->setCellValue('O'.$y,$row['disp_quarter']);
+                $this->excel->getActiveSheet()->setCellValue('P'.$y,$row['disp_type']);
+                $this->excel->getActiveSheet()->setCellValue('R'.$y,$row['disp_year']);
+            }
+
+            $filename='dsp.xls'; //save our workbook as this file name
+            header('Content-Type: application/vnd.ms-excel'); //mime type
+            header('Content-Disposition: attachment;filename="'.$filename.'"'); //tell browser what's the file name
+            header('Cache-Control: max-age=0'); //no cache
+
+            //save it to Excel5 format (excel 2003 .XLS file), change this to 'Excel2007' (and adjust the filename extension, also the header mime type)
+            //if you want to save it as .XLSX Excel 2007 format
+            $objWriter = PHPExcel_IOFactory::createWriter($this->excel, 'Excel5');
+            //force user to download the Excel file without writing it to server's HD
+            $objWriter->save('php://output');
+
+
+
 
 
         } else {
             $res['auth'] = 0;
         }
-         $this->load->view('exel', $res);
+
     }
 
     public function toexelFromInPlan(){
@@ -498,11 +558,78 @@ class Dsp_patients extends CI_Controller {
             $arg['chk_red']='false';
             $res['patients']['rows'] = $this->patient_model->GetPatientsAll($arg);
 
+            $this->load->library('excel');
+            //activate worksheet number 1
+            $this->excel->setActiveSheetIndex(0);
+            //name the worksheet
+            $this->excel->getActiveSheet()->setTitle('Диспансеризация');
+            //set cell A1 content with some text
+            $y=1;
+
+            $this->excel->getActiveSheet()->setCellValue('A'.$y,'ЛПУ прикрепления');
+            $this->excel->getActiveSheet()->setCellValue('B'.$y,'Наименование участка');
+            $this->excel->getActiveSheet()->setCellValue('C'.$y,'Участок');
+            $this->excel->getActiveSheet()->setCellValue('D'.$y,'Тип участка');
+            $this->excel->getActiveSheet()->setCellValue('E'.$y,'Код врача');
+            $this->excel->getActiveSheet()->setCellValue('F'.$y,'Специальность врача');
+            $this->excel->getActiveSheet()->setCellValue('G'.$y,'Фамилия');
+            $this->excel->getActiveSheet()->setCellValue('H'.$y,'Имя');
+            $this->excel->getActiveSheet()->setCellValue('I'.$y,'Отчество');
+            $this->excel->getActiveSheet()->setCellValue('J'.$y,'Возраст');
+            $this->excel->getActiveSheet()->setCellValue('K'.$y,'Дата рождения');
+            $this->excel->getActiveSheet()->setCellValue('L'.$y,'Пол');
+            $this->excel->getActiveSheet()->setCellValue('M'.$y,'ЕНП');
+            $this->excel->getActiveSheet()->setCellValue('N'.$y,'ЛПУ');
+            $this->excel->getActiveSheet()->setCellValue('O'.$y,'Квартал');
+            $this->excel->getActiveSheet()->setCellValue('P'.$y,'Тип диспансеризации');
+            $this->excel->getActiveSheet()->setCellValue('R'.$y,'Год');
+
+            foreach($res['patients']['rows'] as $row){
+                $y++;
+                $this->excel->getActiveSheet()->setCellValue('A'.$row['lpubase']);
+                $this->excel->getActiveSheet()->setCellValue('B'.$y,$row['NAME']);
+                $this->excel->getActiveSheet()->setCellValue('C'.$y,$row['lpubase_u']);
+                $this->excel->getActiveSheet()->setCellValue('D'.$y,$row['typeui']);
+                $this->excel->getActiveSheet()->setCellValue('E'.$y,$row['drcode']);
+                $this->excel->getActiveSheet()->setCellValue('F'.$y,$row['speccode']);
+                $this->excel->getActiveSheet()->setCellValue('G'.$y,$row['surname1']);
+                $this->excel->getActiveSheet()->setCellValue('H'.$y,$row['name1']);
+                $this->excel->getActiveSheet()->setCellValue('I'.$y,$row['secname1']);
+                $this->excel->getActiveSheet()->setCellValue('J'.$y,$row['age']);
+                $this->excel->getActiveSheet()->setCellValue('K'.$y,date('d.m.Y',strtotime($row['birthday1'])));
+                $this->excel->getActiveSheet()->setCellValue('L'.$y,$row['sex']);
+                $this->excel->getActiveSheet()->setCellValue('M'.$y,$row['enp']);
+                $this->excel->getActiveSheet()->setCellValue('N'.$y,$row['disp_lpu']);
+                $this->excel->getActiveSheet()->setCellValue('O'.$y,$row['disp_quarter']);
+                $this->excel->getActiveSheet()->setCellValue('P'.$y,$row['disp_type']);
+                $this->excel->getActiveSheet()->setCellValue('R'.$y,$row['disp_year']);
+            }
+
+            //change the font size
+            //$this->excel->getActiveSheet()->getStyle('A1')->getFont()->setSize(20);
+            //make the font become bold
+            //$this->excel->getActiveSheet()->getStyle('A1')->getFont()->setBold(true);
+            //merge cell A1 until D1
+            //$this->excel->getActiveSheet()->mergeCells('A1:D1');
+            //set aligment to center for that merged cell (A1 to D1)
+            //$this->excel->getActiveSheet()->getStyle('A1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+
+            $filename='dsp.xls'; //save our workbook as this file name
+            header('Content-Type: application/vnd.ms-excel'); //mime type
+            header('Content-Disposition: attachment;filename="'.$filename.'"'); //tell browser what's the file name
+            header('Cache-Control: max-age=0'); //no cache
+
+            //save it to Excel5 format (excel 2003 .XLS file), change this to 'Excel2007' (and adjust the filename extension, also the header mime type)
+            //if you want to save it as .XLSX Excel 2007 format
+            $objWriter = PHPExcel_IOFactory::createWriter($this->excel, 'Excel5');
+            //force user to download the Excel file without writing it to server's HD
+            $objWriter->save('php://output');
+
 
         } else {
             $res['auth'] = 0;
         }
-         $this->load->view('exel', $res);
+
     }
 
 
