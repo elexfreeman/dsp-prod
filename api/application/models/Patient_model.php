@@ -222,6 +222,8 @@ where d_fin is null
    ,dp.[stage_1_result]
    ,dp.[stage_2_result]
    ,dp.[refusal_reason]
+   ,dp.[lgg_code]
+   ,dp.[disp_final]
 from [OMS].[dbo].[OMSC_INSURED_SREZ] i
 
 
@@ -366,6 +368,8 @@ where d_fin is null
     ,dp.[stage_1_result]
    ,dp.[stage_2_result]
    ,dp.[refusal_reason]
+   ,dp.[lgg_code]
+   ,dp.[disp_final]
 from [OMS].[dbo].[OMSC_INSURED_SREZ] i
 
 
@@ -431,7 +435,7 @@ declare @year int = 3;
 declare @lpu int = ".$lpu.";
 
 
-select top 10  *
+select top 10   *
 from(
 select *,
 case when drcode is null or speccode is null then 1 else 0 end as error
@@ -489,14 +493,16 @@ where d_fin is null
   i.surname as surname1, i.name as name1, i.secname as secname1, i.birthday as birthday1
 
   ,dp.[status]
-  ,pld.NAME
   ,dp.guid
+  ,pld.NAME
   , i.SEX sex
   ,dp.[disp_quarter]
   ,dp.[disp_start]
     ,dp.[stage_1_result]
    ,dp.[stage_2_result]
    ,dp.[refusal_reason]
+   ,dp.[lgg_code]
+   ,dp.[disp_final]
 from [OMS].[dbo].[OMSC_INSURED_SREZ] i
 
 
@@ -524,6 +530,8 @@ $chk_status
 ) y
 
 ";
+
+
 
 
         $query = $this->db_mssql->conn_id->query($sql);
@@ -785,7 +793,6 @@ INSERT INTO [DISP_WEB].[dbo].[disp_plan]
           ,'".$arg['stage_2_result']."'
           ,'0');
 ";
-
 
         $query = $this->db_mssql->conn_id->query($sql);
         $res = $this->elex->row_array($query);
@@ -1065,5 +1072,25 @@ INSERT INTO [DISP_WEB].[dbo].[tfoms_errors_descriptions]
         return $this->elex->result_array($query);
     }
 
+
+    public function GetUserWithTfoms(){
+        $sql="SELECT top 2 [id]
+              ,[username]
+              ,[password]
+              ,[lpucode]
+              ,[group]
+              ,[fullname]
+              ,[description]
+              ,[DRCODE]
+              ,[tfoms_user_id]
+              ,[tfoms_password]
+              ,[tfoms_username]
+              ,[tfoms_date_planning]
+          FROM [DISP_WEB].[dbo].[users]
+
+          where tfoms_username is not null";
+        $query = $this->db_mssql->conn_id->query($sql);
+        return $this->elex->result_array($query);
+    }
 }
 

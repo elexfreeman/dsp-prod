@@ -709,7 +709,7 @@ class Dsp_patients extends CI_Controller {
             $arg['chk4']='true';
 
             $arg['chk_red']='false';
-            $res['patients']['rows'] = $this->patient_model->GetPatientsAll($arg);
+            $res['patients']['rows'] = $this->patient_model->GetPatientsAll10($arg);
 
             $send_data = [];
             /*перебераем пациентов*/
@@ -770,7 +770,8 @@ class Dsp_patients extends CI_Controller {
                 $arg = array();
                 if($p['guid']=='')
                     $arg['guid'] =  $this->tfoms->GUID();
-                else $arg['guid'] = $p['guid'];
+                else
+                    $arg['guid'] = $p['guid'];
 
                 $arg['enp'] = strval($p['enp']);
                 $arg['disp_year'] = $p['disp_year'];
@@ -894,6 +895,19 @@ class Dsp_patients extends CI_Controller {
         echo json_encode($res);
     }
 
+    public function get_manual_filters(){
+        $res = array();
+        if($this->auth_model->IsLogin()) {
+            $res['auth'] = 1;
+
+            $res['TfomsErrors'] = $this->tfoms->get_manual_filters();
+        }
+        else {
+            $res['auth'] = 0;
+        }
+        echo print_r($res);
+    }
+
 
     public function Testexel(){
 
@@ -989,7 +1003,104 @@ class Dsp_patients extends CI_Controller {
         } else {
             $res['auth'] = 0;
         }
+    }
+
+
+    public function UpdateGUID(){
+        $res = array();
+
+
+
+
+                $users = $this->patient_model->GetUserWithTfoms();
+                foreach($users as $user){
+                    $this->tfoms->username = $user['tfoms_username'];
+                    $this->tfoms->password = $user['tfoms_password'];
+                    $this->tfoms->user_id = $user['tfoms_user_id'];
+                    $send_data = [];
+                    /*перебераем пациентов*/
+                    $i=0;
+                    $response = [];
+
+                    $data = $this->input->post('data');
+                    $patient = $this->input->post('patient');
+                    $d = $this->GetFilterParams($data,$patient);
+                    $data = $d['data'];
+                    $arg = $d['arg'];
+                    $arg['lpucode'] = $user['lpucode'];
+
+                    $arg['chk1']='true';
+                    $arg['chk2']='true';
+                    $arg['chk3']='true';
+                    $arg['chk4']='true';
+
+                    $arg['chk_red']='false';
+                    $res['patients']['rows'] = $this->patient_model->GetPatientsAll($arg);
+
+
+                    foreach($res['patients']['rows'] as $p){
+                        unset($arg);
+                        $arg = array();
+                        $arg['enp'] = strval($p['enp']);
+                        $arg['lpu'] = $p['disp_lpu'];
+                        unset($tfoms_erors);
+                        $tfoms_erors = $this->tfoms->disp_plan_selectByENPCurl($arg);
+
+                        echo "==============GUID================== \r\n";
+                        print_r($tfoms_erors);
+
+                        if(!($tfoms_erors===false)){
+                            echo $tfoms_erors['guid']." ".$tfoms_erors['enp']." \r\n";
+                            /*вставляем строчку с */
+                            unset($arg_insert);
+                            $arg_insert=[];
+                            $arg_insert = array();
+                            $arg_insert['guid'] = $tfoms_erors['guid'];
+                            $arg_insert['disp_year'] = $tfoms_erors['disp_year'];
+                            $arg_insert['disp_quarter'] = $tfoms_erors['disp_quarter'];
+                            $arg_insert['disp_type'] = $tfoms_erors['disp_type'];
+                            $arg_insert['disp_lpu'] = $tfoms_erors['disp_type'];
+                            $arg_insert['age'] = $tfoms_erors['age'];
+
+                            $arg_insert['drcode'] = $tfoms_erors['drcode'];
+                            $arg_insert['speccode'] = $tfoms_erors['speccode'];
+
+                            $arg_insert['disp_start'] = $p['disp_start'];
+                            $arg_insert['date_planning'] = $tfoms_erors['date_planning'];
+                            $arg_insert['enp'] = $tfoms_erors['enp'];
+
+                            $arg_insert['status'] = $p['status'];
+                            $arg_insert['disp_final'] = $p['disp_final'];
+                            $arg_insert['error'] = $p['error'];
+
+
+                            $arg_insert['stage_1_result'] = $p['stage_1_result'];
+                            if(isset($tfoms_erors['stage_1_result'])) $arg_insert['stage_1_result'] = $tfoms_erors['stage_1_result'];
+
+                            $arg_insert['stage_2_result'] = $p['stage_2_result'];
+                            if(isset($tfoms_erors['stage_2_result'])) $arg_insert['stage_2_result'] = $tfoms_erors['stage_2_result'];
+
+                            $arg_insert['refusal_reason'] = $p['refusal_reason'];
+                            if(isset($tfoms_erors['refusal_reason'])) $arg_insert['refusal_reason'] = $tfoms_erors['refusal_reason'];
+
+                            $arg_insert['lgg_code'] = $p['lgg_code'];
+                            if(isset($tfoms_erors['lgg_code'])) $arg_insert['lgg_code'] = $tfoms_erors['lgg_code'];
+
+                            $this->patient_model->InsertPatientStatus($arg_insert);
+
+                            print_r($arg_insert);
+
+
+                            // $result = $this->tfoms->disp_plan_create($arg);
+
+                        }
+                    }
+                }
 
     }
+
+
+
+
 
 }

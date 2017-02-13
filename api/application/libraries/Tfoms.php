@@ -21,8 +21,8 @@ class Tfoms
 
     public function __construct()
     {
-        $this->wsdl = $_SERVER['DOCUMENT_ROOT']."/services.wsdl";
-        $this->soap = new SoapClient($this->wsdl,array('trace'=>true,'exceptions'=>true));
+        /*$this->wsdl = $_SERVER['DOCUMENT_ROOT']."/services.wsdl";
+        $this->soap = new SoapClient($this->wsdl,array('trace'=>true,'exceptions'=>true));*/
     }
 
     //генератор паролей
@@ -102,10 +102,28 @@ class Tfoms
             echo $this->soap->__getLastRequest()."\n\r";
             return $fault->detail;
         }
-
         return true;
+    }
 
+    public function disp_plan_select_enp($arg){
 
+        $a =array('filter_list'=> (object)['filter' =>$arg]);
+
+        $output = $this->wssecurity_text_header();
+        try {
+            $res =  $this->soap->__soapCall('disp_plan_select', $a,$a,$output);
+            echo $output;
+           /* echo $this->soap->__getLastRequestHeaders()." \n\r";
+            echo $this->soap->__getLastRequest()."\n\r";*/
+
+        }catch(SoapFault $fault) {
+
+            //$res = $this->soap->__getLastResponse();
+         /*   echo $this->soap->__getLastRequestHeaders()." \n\r";
+            echo $this->soap->__getLastRequest()."\n\r";*/
+            //return $fault;
+        }
+        return true;
     }
 
     /*Наименование функции: disp_plan_select.
@@ -319,6 +337,99 @@ class Tfoms
             $xml = new SimpleXMLElement($response1);
             // print_r($parser);
             return $xml;
+        }
+        else return false;
+
+    }
+    public function disp_plan_selectByENPCurl($arg){
+
+
+        $send = "";
+        foreach ($arg as $key => $value) {
+            $send.="<".$key.">".$value."</".$key.">";
+        }
+
+        $xml_post_string=
+            '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:sync="http://sync.service.riemk.imc.com/">'.
+            '<soapenv:Header>'.
+                '<wsse:Security xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd">'.
+                    '<wsse:UsernameToken wsu:Id="UsernameToken">'.
+                        '<wsse:Username>' . $this->username . '</wsse:Username> '.
+                        '<wsse:Password Type="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText">' . $this->password . '</wsse:Password>'.
+                    '</wsse:UsernameToken>' .
+                '</wsse:Security>' .
+            '</soapenv:Header>' .
+            '<soapenv:Body>' .
+                '<sync:disp_plan_select>' .
+                    '<filter_list>' .
+                        '<filter>' .
+                            '<code>' .'12' .'</code> ' .
+                            '<value>' .$arg['enp'].'</value>'.
+                        '</filter>'.
+                    '</filter_list>' .
+                '</sync:disp_plan_select>' .
+            '</soapenv:Body>' .
+            '</soapenv:Envelope> ';
+
+        $xml_post_string=
+            '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:sync="http://sync.service.riemk.imc.com/">'.
+            '<soapenv:Header>'.
+                '<wsse:Security xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd">'.
+                    '<wsse:UsernameToken wsu:Id="UsernameToken">'.
+                        '<wsse:Username>' . $this->username . '</wsse:Username> '.
+                        '<wsse:Password Type="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText">' . $this->password . '</wsse:Password>'.
+                    '</wsse:UsernameToken>' .
+                '</wsse:Security>' .
+            '</soapenv:Header>' .
+            '<soapenv:Body>' .
+                '<sync:disp_plan_select>' .
+                    '<filter_list>
+                        <filter>
+                           <code>12</code>
+                           <value>6353300847000373</value>
+                        </filter>
+                     </filter_list>' .
+                '</sync:disp_plan_select>' .
+            '</soapenv:Body>' .
+            '</soapenv:Envelope> ';
+
+
+
+           $headers = array(
+                        "Content-type: text/xml;charset=UTF-8",
+                        "Accept: text/xml",
+                        "Cache-Control: no-cache",
+                        "SOAPAction: ''",
+                        "Content-length: ".strlen($xml_post_string),
+                    ); //SOAPAction: your op URL
+            $url = 'http://'.$this->address.":".$this->port.'/riisz/sync/services';
+
+            // PHP cURL  for https connection with auth
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_USERPWD, $this->username.":".$this->password); // username and password - declared at the top of the doc
+            curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_ANY);
+            curl_setopt($ch, CURLOPT_TIMEOUT, 1000);
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $xml_post_string); // the SOAP request
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+            // converting
+            $response = curl_exec($ch);
+            curl_close($ch);
+
+            // converting
+        if($response!=''){
+            $response1 = str_replace(":","_",$response);
+            // convertingc to XML
+            $parser = simplexml_load_string($response);
+            $xml = new SimpleXMLElement($response1);
+            // print_r($parser);
+            if(isset($xml->S_Body->ns2_disp_plan_selectResponse->RESULT->DISP_PLAN))
+            return (array)$xml->S_Body->ns2_disp_plan_selectResponse->RESULT->DISP_PLAN;
+            else return false;
         }
         else return false;
 
