@@ -349,27 +349,7 @@ class Tfoms
             $send.="<".$key.">".$value."</".$key.">";
         }
 
-        $xml_post_string=
-            '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:sync="http://sync.service.riemk.imc.com/">'.
-            '<soapenv:Header>'.
-                '<wsse:Security xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd">'.
-                    '<wsse:UsernameToken wsu:Id="UsernameToken">'.
-                        '<wsse:Username>' . $this->username . '</wsse:Username> '.
-                        '<wsse:Password Type="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText">' . $this->password . '</wsse:Password>'.
-                    '</wsse:UsernameToken>' .
-                '</wsse:Security>' .
-            '</soapenv:Header>' .
-            '<soapenv:Body>' .
-                '<sync:disp_plan_select>' .
-                    '<filter_list>' .
-                        '<filter>' .
-                            '<code>' .'12' .'</code> ' .
-                            '<value>' .$arg['enp'].'</value>'.
-                        '</filter>'.
-                    '</filter_list>' .
-                '</sync:disp_plan_select>' .
-            '</soapenv:Body>' .
-            '</soapenv:Envelope> ';
+
 
         $xml_post_string=
             '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:sync="http://sync.service.riemk.imc.com/">'.
@@ -386,7 +366,7 @@ class Tfoms
                     '<filter_list>
                         <filter>
                            <code>12</code>
-                           <value>6353300847000373</value>
+                           <value>'.$arg['enp'].'</value>
                         </filter>
                      </filter_list>' .
                 '</sync:disp_plan_select>' .

@@ -531,7 +531,7 @@ $chk_status
 
 ";
 
-
+echo $sql;
 
 
         $query = $this->db_mssql->conn_id->query($sql);
