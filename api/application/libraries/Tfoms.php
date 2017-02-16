@@ -21,8 +21,8 @@ class Tfoms
 
     public function __construct()
     {
-        /*$this->wsdl = $_SERVER['DOCUMENT_ROOT']."/services.wsdl";
-        $this->soap = new SoapClient($this->wsdl,array('trace'=>true,'exceptions'=>true));*/
+        $this->wsdl = $_SERVER['DOCUMENT_ROOT']."/services.wsdl";
+        $this->soap = new SoapClient($this->wsdl,array('trace'=>true,'exceptions'=>true));
     }
 
     //генератор паролей
