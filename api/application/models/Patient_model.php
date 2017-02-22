@@ -882,6 +882,8 @@ where (pld.D_FIN is null)and((pld.LPUCODE =".$lpucode.")or(pld.LPUCHIEF=".$lpuco
         if(!isset($arg['disp_year'])) $arg['disp_year']='';
         if(!isset($arg['guid'])) $arg['guid']='';
         if(!isset($arg['lgg_code'])) $arg['lgg_code']='';
+        if(!isset($arg['date_planning'])) $arg['date_planning']='';
+        if(!isset($arg['disp_final'])) $arg['disp_final']='';
 
         $sql="
 set dateformat ymd;
@@ -903,6 +905,7 @@ INSERT INTO [DISP_WEB].[dbo].[disp_plan]
            ,[disp_start]
            ,[stage_1_result]
            ,[stage_2_result]
+           ,[disp_final]
            ,[deleted])
            OUTPUT INSERTED.id
      VALUES
@@ -923,6 +926,7 @@ INSERT INTO [DISP_WEB].[dbo].[disp_plan]
           ,'".$arg['disp_start']."'
           ,'".$arg['stage_1_result']."'
           ,'".$arg['stage_2_result']."'
+          ,'".$arg['disp_final']."'
           ,'0');
 ";
 
@@ -1206,7 +1210,7 @@ INSERT INTO [DISP_WEB].[dbo].[tfoms_errors_descriptions]
 
 
     public function GetUserWithTfoms(){
-        $sql="SELECT top 2 [id]
+        $sql="SELECT  [id]
               ,[username]
               ,[password]
               ,[lpucode]

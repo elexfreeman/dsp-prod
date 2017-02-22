@@ -872,7 +872,14 @@ class Dsp_patients extends CI_Controller {
 
     public function SendTfoms701(){
         $res = array();
-        if($this->auth_model->IsLogin()) {
+
+        $users = $this->patient_model->GetUserWithTfoms();
+        foreach($users as $user){
+            print_r($user);
+            $this->tfoms->username = $user['tfoms_username'];
+            $this->tfoms->password = $user['tfoms_password'];
+            $this->tfoms->user_id = $user['tfoms_user_id'];
+
             $res['auth'] = 1;
             $res['user'] = $this->auth_model->UserInfo();
 
@@ -881,7 +888,7 @@ class Dsp_patients extends CI_Controller {
             $d = $this->GetFilterParams($data,$patient);
             $data = $d['data'];
             $arg = $d['arg'];
-            $arg['lpucode'] = $res['user']['lpucode'];
+            $arg['lpucode'] = $user['lpucode'];
 
             $arg['chk1']='true';
             $arg['chk2']='true';
@@ -931,11 +938,11 @@ class Dsp_patients extends CI_Controller {
                 unset($send_data);
                 $send_data = [];
 
-                $user = $this->auth_model->GetRegUserInfo();
+               /* $user = $this->auth_model->GetRegUserInfo();
 
                 $this->tfoms->username = $user['tfoms_username'];
                 $this->tfoms->password = $user['tfoms_password'];
-                $this->tfoms->user_id = $user['tfoms_user_id'];
+                $this->tfoms->user_id = $user['tfoms_user_id'];*/
 
                 /*статусы
                 - 0 не вкл в  план
@@ -992,9 +999,9 @@ class Dsp_patients extends CI_Controller {
                 $arg['disp_quarter'] = $p['disp_quarter'];
                 $arg['disp_type'] = '1';
                 $arg['disp_lpu'] = $p['disp_lpu'];
-                if(($arg['disp_lpu']==9501)or($arg['disp_lpu']==4064)){
+               /* if(($arg['disp_lpu']==9501)or($arg['disp_lpu']==4064)){
                     $arg['disp_lpu'] =4061;
-                }
+                }*/
                 $arg['age'] = $p['age'];
                 //$arg['lgg_code'] = 0;
                 $arg['drcode'] = $p['drcode'];
@@ -1084,8 +1091,6 @@ class Dsp_patients extends CI_Controller {
                 }
                ;
             }
-        } else {
-            $res['auth'] = 0;
         }
     }
 
