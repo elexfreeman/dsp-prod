@@ -263,7 +263,7 @@ $chk_status
 where  (rn between ".$offset." and ".($offset+$limit).") order by rn
 ";
 
-echo $sql;
+
         $query = $this->db_mssql->conn_id->query($sql);
         /*http://proft.me/2008/11/28/primery-ispolzovaniya-pdo/*/
         return $this->elex->result_array($query);
@@ -830,7 +830,7 @@ where (pld.D_FIN is null)and((pld.LPUCODE =".$lpucode.")or(pld.LPUCHIEF=".$lpuco
             $sql="SELECT d2.LPUTER_U as num_uch
   FROM [DISP_WEB].[dbo].[users] u2
   join  [AKTPAK].[dbo].[AKPC_TMODOC] d2 on u2.drcode = d2.DRCODE
-  where (u2.lpucode = ".$lpucode.") and (u2.drcode = '". mb_convert_encoding($drcode,"Windows-1251","UTF-8")."')";
+  where (d2.D_FIN is null)and (u2.lpucode = ".$lpucode.") and (u2.drcode = '". mb_convert_encoding($drcode,"Windows-1251","UTF-8")."')";
 
         }
         $query = $this->db_mssql->conn_id->query($sql);
