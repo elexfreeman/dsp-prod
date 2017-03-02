@@ -262,7 +262,7 @@ $chk_status
 ) y
 where  (rn between ".$offset." and ".($offset+$limit).") order by rn
 ";
-
+echo $sql;
 
         $query = $this->db_mssql->conn_id->query($sql);
         /*http://proft.me/2008/11/28/primery-ispolzovaniya-pdo/*/
@@ -1228,5 +1228,14 @@ INSERT INTO [DISP_WEB].[dbo].[tfoms_errors_descriptions]
         $query = $this->db_mssql->conn_id->query($sql);
         return $this->elex->result_array($query);
     }
+
+    public function GetLastDspStatus($enp){
+        $sql="select top 1 * from [DISP_WEB].[dbo].[disp_plan] p
+        where p.enp = '".$enp."'
+ order by id desc";
+        $query = $this->db_mssql->conn_id->query($sql);
+        return $this->elex->row_array($query);
+    }
+
 }
 

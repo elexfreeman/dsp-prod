@@ -217,9 +217,39 @@ class Dsp_patients extends CI_Controller {
     public function setstatus(){
         $res = array();
         if ($this->auth_model->IsLogin()) {
+            $arg = array();
+            $last_status = $this->patient_model->GetLastDspStatus($this->input->post('patient_enp'));
+            if(isset($last_status)){
+                $arg['disp_type'] = $last_status['disp_type'];
+                $arg['age'] = $last_status['age'];
+                $arg['lgg_code'] = $last_status['lgg_code'];
+                $arg['drcode'] =$last_status['drcode'];
+                $arg['refusal_reason'] = $last_status['refusal_reason'];
+                $arg['disp_start'] = $last_status['disp_start'];
+                $arg['stage_1_result'] = $last_status['stage_1_result'];
+                $arg['stage_2_result'] = $last_status['stage_2_result'];
+                $arg['guid'] = $last_status['guid'];
+                $arg['speccode'] = $last_status['speccode'];
+                $arg['disp_final'] = $last_status['disp_final'];
+                $arg['date_planning'] = $last_status['date_planning'];
+
+
+            } else {
+                $arg['disp_type'] = 1;
+                $arg['age'] = 1;
+                $arg['lgg_code'] = 1;
+                $arg['drcode'] = 1;
+                $arg['refusal_reason'] = 1;
+                $arg['disp_start'] = '';
+                $arg['stage_1_result'] = '';
+                $arg['stage_2_result'] = '';
+                $arg['guid'] = '';
+                $arg['speccode'] = '';
+            }
+
             $res['auth'] = 1;
             $res['user'] = $this->auth_model->UserInfo();
-            $arg = array();
+
             $arg['enp'] = $this->input->post('patient_enp');
             $arg['status'] = $this->input->post('status');
             $arg['disp_year'] = $this->input->post('disp_year');

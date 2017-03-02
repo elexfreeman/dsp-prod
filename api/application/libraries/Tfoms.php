@@ -349,8 +349,6 @@ class Tfoms
             $send.="<".$key.">".$value."</".$key.">";
         }
 
-
-
         $xml_post_string=
             '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:sync="http://sync.service.riemk.imc.com/">'.
             '<soapenv:Header>'.
