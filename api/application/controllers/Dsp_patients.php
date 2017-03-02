@@ -1020,7 +1020,8 @@ class Dsp_patients extends CI_Controller {
 
                     if(!($tfoms_erors===false)) {
                         echo $tfoms_erors['guid'] . " " . $tfoms_erors['enp'] . " \r\n";
-                        $arg['guid'] =  $tfoms_erors['guid'];
+                        if($tfoms_erors['guid']!='')
+                            $arg['guid'] =  $tfoms_erors['guid'];
                     }
 
                     $arg['disp_start'] = $p['disp_start'];
