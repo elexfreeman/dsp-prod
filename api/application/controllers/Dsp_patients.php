@@ -1046,13 +1046,13 @@ class Dsp_patients extends CI_Controller {
                     $arg_guid['enp'] = strval($p['enp']);
                     $arg_guid['lpu'] = $p['disp_lpu'];
                     unset($tfoms_erors);
-                    $tfoms_erors = $this->tfoms->disp_plan_selectByENPCurl($arg_guid);
+                  /*  $tfoms_erors = $this->tfoms->disp_plan_selectByENPCurl($arg_guid);
 
                     if(!($tfoms_erors===false)) {
                         echo $tfoms_erors['guid'] . " " . $tfoms_erors['enp'] . " \r\n";
                         if($tfoms_erors['guid']!='')
                             $arg['guid'] =  $tfoms_erors['guid'];
-                    }
+                    }*/
 
                     $arg['disp_start'] = $p['disp_start'];
                     $arg['disp_final'] = $p['disp_final'];
@@ -1063,6 +1063,7 @@ class Dsp_patients extends CI_Controller {
                     $arg['user_id'] = $this->tfoms->user_id;
 
                     print_r($arg);
+
 
                     $tfoms_erors = $this->tfoms->disp_plan_createCurl($arg);
                     echo "<pre>";

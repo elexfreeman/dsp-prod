@@ -349,6 +349,18 @@ class Tfoms
             $send.="<".$key.">".$value."</".$key.">";
         }
 
+        /*
+         *  [13] => stdClass Object
+                                (
+                                    [semd_type_id] => 2
+                                    [semd_type_name] => ЭМД: Диспансеризация
+                                    [id] => 14
+                                    [d_modif] => 2016-12-01
+                                    [name] => ЕНП
+                                    [values_type] => bigint
+                                    [const_name] => filter_disp_plan_enp_edit
+                                )*/
+
         $xml_post_string=
             '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:sync="http://sync.service.riemk.imc.com/">'.
             '<soapenv:Header>'.
@@ -363,7 +375,7 @@ class Tfoms
                 '<sync:disp_plan_select>' .
                     '<filter_list>
                         <filter>
-                           <code>12</code>
+                           <code>14</code>
                            <value>'.$arg['enp'].'</value>
                         </filter>
                      </filter_list>' .
