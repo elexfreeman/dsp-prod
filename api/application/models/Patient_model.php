@@ -262,7 +262,7 @@ $chk_status
 ) y
 where  (rn between ".$offset." and ".($offset+$limit).") order by rn
 ";
-echo $sql;
+
 
         $query = $this->db_mssql->conn_id->query($sql);
         /*http://proft.me/2008/11/28/primery-ispolzovaniya-pdo/*/
@@ -502,6 +502,7 @@ where d_fin is null
    ,dp.[refusal_reason]
    ,dp.[lgg_code]
    ,dp.[disp_final]
+   ,dp.[operator]
 from [OMS].[dbo].[OMSC_INSURED_SREZ] i
 
 
@@ -523,12 +524,13 @@ where (1=1)
 
  and (not((drcode is null) or (speccode is null)))
  and(disp_start<>'1900-01-01')
+ and(operator = 'TumanovaVV3')
 
 ) y
 
 ";
 
-echo $sql;
+//echo $sql;
 
 
         $query = $this->db_mssql->conn_id->query($sql);
@@ -663,7 +665,7 @@ $chk_status
 
 ";
 
-echo $sql;
+//echo $sql;
 
 
         $query = $this->db_mssql->conn_id->query($sql);
