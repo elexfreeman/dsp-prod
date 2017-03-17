@@ -64,6 +64,7 @@ class Dsp_patients extends CI_Controller {
         if(isset($patient['chk3'])) $arg['chk3'] = $patient['chk3'];
         if(isset($patient['chk4'])) $arg['chk4'] = $patient['chk4'];
         if(isset($patient['chk_red'])) $arg['chk_red'] = $patient['chk_red'];
+        if(isset($patient['error_code'])) $arg['error_code'] = $patient['error_code'];
 
         if(isset($patient['q'])) $arg['q'] = $patient['q'];
 
@@ -1930,6 +1931,17 @@ class Dsp_patients extends CI_Controller {
                 }
                 ;
             }
+        }
+    }
+
+    public function PrepareTfoms(){
+        $res = array();
+        if($this->auth_model->IsLogin()) {
+            $res['auth'] = 1;
+            $res['user'] = $this->auth_model->UserInfo();
+
+            $this->patient_model->PrepareTfoms($res['user']['lpucode']);
+
         }
     }
 

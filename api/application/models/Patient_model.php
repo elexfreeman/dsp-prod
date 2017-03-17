@@ -69,9 +69,15 @@ class Patient_model extends CI_Model
             $error_code = "and(error_code = ".$arg['error_code'].")";
 
 
-        }        $q='';
+        }
+
+        $q='';
         if((isset($arg['q']))and((int)$arg['q']>0)){
             $q = "and(disp_quarter = ".$arg['q'].")";
+        }
+        $error_code='';
+        if((isset($arg['error_code']))and((int)$arg['error_code']>0)){
+            $error_code = "and(e.error_code=".$arg['error_code'].")";
         }
 
 
@@ -123,6 +129,7 @@ class Patient_model extends CI_Model
         $res['q'] = $q;
         $res['sex'] = $sex;
         $res['fio'] = $fio;
+        $res['error_code'] = $error_code;
         return $res;
     }
 
@@ -138,6 +145,9 @@ class Patient_model extends CI_Model
         $sex = $params['sex'];
         $chk_status = $params['chk_status'];
         $chk_red = $params['chk_red'];
+        $error_code = $params['error_code'];
+
+
         if($chk_red!='') $chk_red=' and '.$chk_red;
         $q = $params['q'];
         $fio = $params['fio'];
@@ -250,6 +260,7 @@ where i.d_fin is null
   and month(i.birthday) between @month_beg and @month_end
   and (year(getdate()) - year(i.BIRTHDAY)) between  @age_beg and @age_end
   ".$fio."
+  ".$error_code."
 ) x
 where (1=1)
 ".$uch_w."
@@ -259,9 +270,12 @@ $chk_status
 ".$chk_red."
 
 
+
 ) y
 where  (rn between ".$offset." and ".($offset+$limit).") order by rn
 ";
+
+
 
 
         $query = $this->db_mssql->conn_id->query($sql);
@@ -280,6 +294,7 @@ where  (rn between ".$offset." and ".($offset+$limit).") order by rn
         $sex = $params['sex'];
         $chk_status = $params['chk_status'];
         $chk_red = $params['chk_red'];
+        $error_code = $params['error_code'];
         if($chk_red!='') $chk_red=' and '.$chk_red;
         $q = $params['q'];
 
@@ -386,6 +401,7 @@ and i.lpuchief = @lpu
   and year(getdate()) - year(i.BIRTHDAY) >= 21
   and month(i.birthday) between @month_beg and @month_end
   and (year(getdate()) - year(i.BIRTHDAY)) between  @age_beg and @age_end
+  ".$error_code."
 ) x
 where (1=1)
 ".$uch_w."
@@ -393,6 +409,7 @@ where (1=1)
 $chk_status
 ".$q."
 ".$chk_red."
+
 
 ) y
 
@@ -690,6 +707,7 @@ $chk_status
         if($chk_red!='') $chk_red=' and '.$chk_red;
         $q = $params['q'];
         $fio = $params['fio'];
+        $error_code = $params['error_code'];
 
 
 
@@ -784,6 +802,7 @@ where i.d_fin is null
   and month(i.birthday) between @month_beg and @month_end
   and (year(getdate()) - year(i.BIRTHDAY)) between  @age_beg and @age_end
   ".$fio."
+  ".$error_code."
 ) x
 where (1=1)
 ".$uch_w."
@@ -793,10 +812,12 @@ $chk_status
 ".$chk_red."
 
 
+
 ) y
 
 ";
 
+        echo $sql;
 
 
 
@@ -1239,5 +1260,23 @@ INSERT INTO [DISP_WEB].[dbo].[tfoms_errors_descriptions]
         return $this->elex->row_array($query);
     }
 
+
+    public function PrepareTfoms($lpu){
+        $sql="
+            USE [DISP_WEB];
+
+
+DECLARE	@return_value int;
+
+EXEC	@return_value = [dbo].[UpdateDispplan]
+		@chief = ". $lpu.",
+		@year = 2017;
+
+SELECT	'Return Value' = @return_value;
+            ";
+        echo $sql;
+        $this->db_mssql->conn_id->query($sql);
+
+    }
 }
 

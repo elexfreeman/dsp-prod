@@ -369,8 +369,13 @@
                                                     <i class="ti-receipt"></i>  В Excel включенных в план</button>
                                             </form>
                                         </div>
-                                        <div class="col-sm-4"></div>
-
+                                        <div class="col-sm-4">
+                                            <form action="/develop/api/dsp_patients/PrepareTfoms" style="display: inline-block">
+                                                <button ng-show="s.lpucode==s.username"
+                                                        type="submit"
+                                                        class="btn btn-fill btn-warning"><i class="ti-arrow-right"></i>  Подготовить для ТФОМС</button>
+                                            </form>
+                                        </div>
                                         <div class="col-sm-4 text-right">
                                             <form action="/develop/api/dsp_patients/SendTfoms" style="display: inline-block">
                                             <button ng-show="s.lpucode==s.username"
