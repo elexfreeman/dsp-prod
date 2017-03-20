@@ -34,7 +34,6 @@ class Patient_model extends CI_Model
         /*http://proft.me/2008/11/28/primery-ispolzovaniya-pdo/*/
         return $this->elex->result_array($query);
     }
-
     private function CreateFilter($arg,$limit,$offset){
         $res = array();
 
@@ -69,15 +68,9 @@ class Patient_model extends CI_Model
             $error_code = "and(error_code = ".$arg['error_code'].")";
 
 
-        }
-
-        $q='';
+        }        $q='';
         if((isset($arg['q']))and((int)$arg['q']>0)){
             $q = "and(disp_quarter = ".$arg['q'].")";
-        }
-        $error_code='';
-        if((isset($arg['error_code']))and((int)$arg['error_code']>0)){
-            $error_code = "and(e.error_code=".$arg['error_code'].")";
         }
 
 
@@ -145,15 +138,14 @@ class Patient_model extends CI_Model
         $sex = $params['sex'];
         $chk_status = $params['chk_status'];
         $chk_red = $params['chk_red'];
-        $error_code = $params['error_code'];
-
-
         if($chk_red!='') $chk_red=' and '.$chk_red;
         $q = $params['q'];
         $fio = $params['fio'];
+        $error_code = $params['error_code'];
 
 
         $sql="
+
 declare @month_beg int = ".$arg['month_beg'].";
 declare @month_end int = ".$arg['month_end'].";
 declare @age_beg int = ".$arg['age_beg'].";
@@ -239,7 +231,8 @@ from [OMS].[dbo].[OMSC_INSURED_SREZ] i
 
 left join ( select * ,
             ROW_NUMBER() over(partition by enp  order by id desc) as nom
-            from [DISP_WEB].[dbo].[disp_plan]) dp on ((dp.enp=i.ENP) and (nom = 1))
+            from [DISP_WEB].[dbo].[disp_plan])
+       dp on ((dp.enp=i.ENP) and (nom = 1))
 
 left join [POLYCLINIC_2010].[dbo].[POLM_LPU_DISTRICTS] pld
 on (pld.NUM = i.LPUBASE_U)and(pld.LPUCODE = i.LPUBASE)and(pld.D_FIN is null) and i.type_u = pld.typedistrict
@@ -248,7 +241,9 @@ on (pld.NUM = i.LPUBASE_U)and(pld.LPUCODE = i.LPUBASE)and(pld.D_FIN is null) and
 
 left join (select disp_plan_id, error_code,
            ROW_NUMBER() over(partition by disp_plan_id  order by id desc) as nom
-		   from disp_web..tfoms_errors) e on dp.id = e.disp_plan_id and e.nom = 1
+		   from  [DISP_WEB].[dbo].[tfoms_errors]) e
+
+on dp.id = e.disp_plan_id and e.nom = 1
 
 		   left join [DISP_WEB].[dbo].[tfoms_errors_descriptions] as  te
 on te.error_code = e.error_code
@@ -260,7 +255,7 @@ where i.d_fin is null
   and month(i.birthday) between @month_beg and @month_end
   and (year(getdate()) - year(i.BIRTHDAY)) between  @age_beg and @age_end
   ".$fio."
-  ".$error_code."
+
 ) x
 where (1=1)
 ".$uch_w."
@@ -268,17 +263,15 @@ where (1=1)
 $chk_status
 ".$q."
 ".$chk_red."
-
-
+".$error_code."
 
 ) y
 where  (rn between ".$offset." and ".($offset+$limit).") order by rn
 ";
 
 
-
-
         $query = $this->db_mssql->conn_id->query($sql);
+
         /*http://proft.me/2008/11/28/primery-ispolzovaniya-pdo/*/
         return $this->elex->result_array($query);
     }
@@ -294,7 +287,6 @@ where  (rn between ".$offset." and ".($offset+$limit).") order by rn
         $sex = $params['sex'];
         $chk_status = $params['chk_status'];
         $chk_red = $params['chk_red'];
-        $error_code = $params['error_code'];
         if($chk_red!='') $chk_red=' and '.$chk_red;
         $q = $params['q'];
 
@@ -401,7 +393,6 @@ and i.lpuchief = @lpu
   and year(getdate()) - year(i.BIRTHDAY) >= 21
   and month(i.birthday) between @month_beg and @month_end
   and (year(getdate()) - year(i.BIRTHDAY)) between  @age_beg and @age_end
-  ".$error_code."
 ) x
 where (1=1)
 ".$uch_w."
@@ -409,7 +400,6 @@ where (1=1)
 $chk_status
 ".$q."
 ".$chk_red."
-
 
 ) y
 
@@ -424,6 +414,7 @@ $chk_status
 
         return $this->elex->result_array($query);
     }
+
     public function GetPatientsAll10($arg) {
 
 
@@ -708,6 +699,7 @@ $chk_status
         $q = $params['q'];
         $fio = $params['fio'];
         $error_code = $params['error_code'];
+      //  $error_code = $params['error_code'];
 
 
 
@@ -785,6 +777,7 @@ where d_fin is null
   pld.NAME
   , i.SEX sex
   ,dp.[disp_quarter]
+  ,e.error_code
 from [OMS].[dbo].[OMSC_INSURED_SREZ] i
 
 
@@ -795,6 +788,15 @@ left join ( select * ,
 left join [POLYCLINIC_2010].[dbo].[POLM_LPU_DISTRICTS] pld
 on (pld.NUM = i.LPUBASE_U)and(pld.LPUCODE = i.LPUBASE)and(pld.D_FIN is null) and i.type_u = pld.typedistrict
 
+left join (select disp_plan_id, error_code,
+           ROW_NUMBER() over(partition by disp_plan_id  order by id desc) as nom
+		   from  [DISP_WEB].[dbo].[tfoms_errors]) e
+
+on dp.id = e.disp_plan_id and e.nom = 1
+
+   left join [DISP_WEB].[dbo].[tfoms_errors_descriptions] as  te
+on te.error_code = e.error_code
+
 where i.d_fin is null
   and i.lpuchief = @lpu
   and (year(getdate()) - year(i.BIRTHDAY)) % 3 = 0
@@ -802,7 +804,8 @@ where i.d_fin is null
   and month(i.birthday) between @month_beg and @month_end
   and (year(getdate()) - year(i.BIRTHDAY)) between  @age_beg and @age_end
   ".$fio."
-  ".$error_code."
+
+
 ) x
 where (1=1)
 ".$uch_w."
@@ -810,14 +813,14 @@ where (1=1)
 $chk_status
 ".$q."
 ".$chk_red."
-
+  ".$error_code."
 
 
 ) y
 
 ";
 
-        echo $sql;
+
 
 
 
@@ -1263,12 +1266,12 @@ INSERT INTO [DISP_WEB].[dbo].[tfoms_errors_descriptions]
 
     public function PrepareTfoms($lpu){
         $sql="
-            USE [DISP_WEB];
+
 
 
 DECLARE	@return_value int;
 
-EXEC	@return_value = [dbo].[UpdateDispplan]
+EXEC	@return_value = [DISP_WEB].[dbo].[UpdateDispplan]
 		@chief = ". $lpu.",
 		@year = 2017;
 
@@ -1276,6 +1279,140 @@ SELECT	'Return Value' = @return_value;
             ";
         echo $sql;
         $this->db_mssql->conn_id->query($sql);
+
+    }
+
+
+    public function test11(){
+        $sql="
+
+
+declare @month_beg int = 1;
+declare @month_end int = 12;
+declare @age_beg int = 21;
+declare @age_end int = 99;
+declare @drcode varchar(8);
+
+
+declare @year int = 3;
+declare @lpu int = 1402;
+
+
+select *
+from(
+select *, ROW_NUMBER() over(order by surname1) as rn,
+case when drcode is null or speccode is null then 1 else 0 end as error
+from
+(select  year(getdate()) - year(i.BIRTHDAY) as vozr,
+
+
+ null as user_id,
+
+
+ 2017 as  disp_year,
+ 1 as disp_type,
+ i.lpuchief as disp_lpu,
+ year(getdate()) - year(i.BIRTHDAY) as  age,
+
+ i.lpubase,
+ i.lpubase_u,
+ i.type_u as typeui,
+
+ i. enp,
+
+
+(select count(*) from [OMS].[dbo].[OMSC_INSURED_SREZ]
+where d_fin is null
+  and lpuchief = @lpu
+  and (year(getdate()) - year(i.BIRTHDAY)) % 3 = 0
+  and year(getdate()) - year(i.BIRTHDAY) >=21
+
+  ) as kol,
+
+
+  (select top 1 drcode
+      from aktpak.[dbo].akpc_tmodoc
+	  where d_fin is null
+
+		and DBSOURCE = 'D'
+
+		and isnull(LPUTER_U,0) = isnull(i.lpubase_u,0)
+		and isnull(LPUTER,0) = isnull(i.lpubase,0)
+		and isnull(type_u,0) = isnull(i.type_u,0)
+      order by drcode
+      )  as drcode,
+  (select top 1 speccode
+      from aktpak.[dbo].akpc_tmodoc
+	  where d_fin is null
+
+		and DBSOURCE = 'D'
+
+		and isnull(LPUTER_U,0) = isnull(i.lpubase_u,0)
+		and isnull(LPUTER,0) = isnull(i.lpubase,0)
+		and isnull(type_u,0) = isnull(i.type_u,0)
+      order by drcode
+      )  as speccode,
+
+  i.surname as surname1, i.name as name1, i.secname as secname1, i.birthday as birthday1
+
+  ,dp.[status],
+  pld.NAME
+  , i.SEX sex
+  ,dp.[disp_quarter]
+  ,e.error_code
+    ,te.[description] error_code_description
+   ,dp.[disp_start]
+   ,dp.[stage_1_result]
+   ,dp.[stage_2_result]
+   ,dp.[refusal_reason]
+   ,dp.[lgg_code]
+   ,dp.[disp_final]
+from [OMS].[dbo].[OMSC_INSURED_SREZ] i
+
+
+left join ( select * ,
+            ROW_NUMBER() over(partition by enp  order by id desc) as nom
+            from [DISP_WEB].[dbo].[disp_plan])
+       dp on ((dp.enp=i.ENP) and (nom = 1))
+
+left join [POLYCLINIC_2010].[dbo].[POLM_LPU_DISTRICTS] pld
+on (pld.NUM = i.LPUBASE_U)and(pld.LPUCODE = i.LPUBASE)and(pld.D_FIN is null) and i.type_u = pld.typedistrict
+
+
+
+left join (select disp_plan_id, error_code,
+           ROW_NUMBER() over(partition by disp_plan_id  order by id desc) as nom
+		   from  [DISP_WEB].[dbo].[tfoms_errors]) e
+
+on dp.id = e.disp_plan_id and e.nom = 1
+
+		   left join [DISP_WEB].[dbo].[tfoms_errors_descriptions] as  te
+on te.error_code = e.error_code
+
+where i.d_fin is null
+  and i.lpuchief = @lpu
+  and (year(getdate()) - year(i.BIRTHDAY)) % 3 = 0
+  and year(getdate()) - year(i.BIRTHDAY) >= 21
+  and month(i.birthday) between @month_beg and @month_end
+  and (year(getdate()) - year(i.BIRTHDAY)) between  @age_beg and @age_end
+
+
+) x
+where (1=1)
+
+
+
+
+
+and(error_code = 13)
+
+) y
+where  (rn between 0 and 30) order by rn
+        ";
+        $query = $this->db_mssql->conn_id->query($sql);
+
+        /*http://proft.me/2008/11/28/primery-ispolzovaniya-pdo/*/
+        return ['sql'=>$sql,'a'=>$this->elex->result_array($query)];
 
     }
 }

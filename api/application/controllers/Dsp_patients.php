@@ -47,7 +47,6 @@ class Dsp_patients extends CI_Controller {
 
         echo json_encode($res);
     }
-
     /*формирует парамтры фильтра из post*/
     public function GetFilterParams($data,$patient){
         $arg=array();
@@ -1945,5 +1944,9 @@ class Dsp_patients extends CI_Controller {
         }
     }
 
+
+    public function Test11(){
+        print_r($this->patient_model->test11());
+    }
 
 }
