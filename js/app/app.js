@@ -18,12 +18,13 @@ var navbar = [
         caption:'План диспансеризации',
         link:'dispPlan',
         icon:'ti-pie-chart'
-    },
-    {
+    }
+    ,
+   /* {
         caption:'План профилактических осмотров',
         link:'proflPlan',
         icon:'ti-support'
-    },
+    },*/
     {
         caption:'Загрузка<br>актуального среза РС ЕРЗЛ',
         link:'loader',

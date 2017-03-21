@@ -720,6 +720,8 @@ class Dsp_patients extends CI_Controller {
             $res['auth'] = 1;
             $res['user'] = $this->auth_model->UserInfo();
 
+            $this->patient_model->PrepareTfoms($res['user']['lpucode']);
+
             $data = $this->input->post('data');
             $patient = $this->input->post('patient');
             $d = $this->GetFilterParams($data,$patient);
