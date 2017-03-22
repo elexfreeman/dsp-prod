@@ -1,6 +1,10 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
+/*
+ * view-source:http://141.0.177.179/develop/api/dsp_patients/get_manual_filters
+ * */
+
 class Dsp_patients extends CI_Controller {
 
 
@@ -794,10 +798,25 @@ class Dsp_patients extends CI_Controller {
                 */
 
                 $arg = array();
-                if($p['guid']=='')
-                    $arg['guid'] =  $this->tfoms->GUID();
-                else
-                    $arg['guid'] = $p['guid'];
+
+
+                unset($tfoms_erors);
+                $arg_guid = array();
+                $arg_guid['enp'] = strval($p['enp']);
+                $arg_guid['lpu'] = $p['disp_lpu'];
+
+                $tfoms_erors = $this->tfoms->disp_plan_selectByENPCurl($arg_guid);
+
+                if(!($tfoms_erors===false)) {
+                    echo $tfoms_erors['guid'] . " " . $tfoms_erors['enp'] . " \r\n";
+                    if($tfoms_erors['guid']!='')
+                        $arg['guid'] =  $tfoms_erors['guid'];
+                }else{
+                    if($p['guid']=='')
+                        $arg['guid'] =  $this->tfoms->GUID();
+                    else
+                        $arg['guid'] = $p['guid'];
+                }
 
                 $arg['enp'] = strval($p['enp']);
                 $arg['disp_year'] = $p['disp_year'];
@@ -887,7 +906,7 @@ class Dsp_patients extends CI_Controller {
                 }
 
                 $response[]=$p;
-                //if($i>3) break;
+               // if($i>3) break;
             }
 
         } else {
@@ -1042,13 +1061,13 @@ class Dsp_patients extends CI_Controller {
                     $arg_guid['enp'] = strval($p['enp']);
                     $arg_guid['lpu'] = $p['disp_lpu'];
                     unset($tfoms_erors);
-                  /*  $tfoms_erors = $this->tfoms->disp_plan_selectByENPCurl($arg_guid);
+                   $tfoms_erors = $this->tfoms->disp_plan_selectByENPCurl($arg_guid);
 
                     if(!($tfoms_erors===false)) {
                         echo $tfoms_erors['guid'] . " " . $tfoms_erors['enp'] . " \r\n";
                         if($tfoms_erors['guid']!='')
                             $arg['guid'] =  $tfoms_erors['guid'];
-                    }*/
+                    }
 
                     $arg['disp_start'] = $p['disp_start'];
                     $arg['disp_final'] = $p['disp_final'];

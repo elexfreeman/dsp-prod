@@ -375,7 +375,7 @@ class Tfoms
                 '<sync:disp_plan_select>' .
                     '<filter_list>
                         <filter>
-                           <code>14</code>
+                           <code>6</code>
                            <value>'.$arg['enp'].'</value>
                         </filter>
                      </filter_list>' .
